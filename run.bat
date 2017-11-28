@@ -1,0 +1,1 @@
+perl ./ProgramFile/CRISPR_Local.pl -i C:\Users\asus\Desktop\Arabidopsis_thaliana.TAIR10.dna.chromosome.1.fa -g C:\Users\asus\Desktop\Arabidopsis_thaliana.TAIR10.37.chromosome.1.gff3 -o C:\Users\asus\Desktop\test -l CRISPR -p 1 -U 0 -D 0
