@@ -15,6 +15,7 @@ public class CmdHelper {
     public TextArea info;
     private boolean stop = false;
     private File file;
+    private String cmdString = "";
 
     public CmdHelper(TextArea info) {
         this.info = info;
@@ -70,7 +71,8 @@ public class CmdHelper {
         @Override
         public void run() {
             try {
-                result = runtime.exec(file.getAbsolutePath());
+                String[] cmd = {"/bin/sh" , "-c" , cmdString};
+                result = runtime.exec(cmd);
                 infoReader = new BufferedReader(new
                         InputStreamReader(result.getInputStream() , "GBK"
                 ));
@@ -117,6 +119,7 @@ public class CmdHelper {
             file.createNewFile();
         }
         FileWriter writer = new FileWriter(file);
+        cmdString = cmd;
         writer.write(cmd);
         writer.close();
         waitThread.start();

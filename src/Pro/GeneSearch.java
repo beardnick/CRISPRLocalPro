@@ -285,9 +285,17 @@ public class GeneSearch {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(
-                            new FileInputStream("src/Resource/help.txt.txt") , "UTF-8"
-                    ));
+                    BufferedReader reader;
+                    if(System.getProperty("os.name").toLowerCase().startsWith("lin")
+                            || System.getProperty("os.name").toLowerCase().startsWith("ubu")){
+                        reader = new BufferedReader(new InputStreamReader(
+                                new FileInputStream("src/Resource/help.txt") , "GBK"
+                        ));
+                    }else {
+                        reader = new BufferedReader(new InputStreamReader(
+                                new FileInputStream("src/Resource/help.txt")
+                        ));
+                    }
                     String temp = "";
                     warningText.setText("");
                     while ((temp = reader.readLine()) != null ){
