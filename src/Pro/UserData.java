@@ -68,6 +68,8 @@ public class UserData {
     private CmdHelper cmdHelper = new CmdHelper(info);
     private StringBuilder dataString = new StringBuilder("");
 
+    public static String[] stopCmd = {"/bin/sh" , "-c" , "ps -ef |grep -e 'CRISPR_Local.pl' -e 'rs2_score_calculator.py' -e 'seqmap-1.0.12-linux-64' -e 'sgRNA_CFD.pl' -e 'cfd-score-calculator.py'|cut -c 9-15 |xargs kill -s 9"};
+
 
     public void initView(){
         title.setFont(R.titleFont);
@@ -393,7 +395,7 @@ public class UserData {
                 if(confirm == JOptionPane.YES_OPTION ){
                     try {
                         System.out.println(confirm);
-                        cmdHelper.stopCmd();
+                        cmdHelper.stopCmd(stopCmd);
                         information.dispose();
                         frame.dispose();
                     } catch (InterruptedException e1) {

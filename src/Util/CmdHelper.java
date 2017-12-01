@@ -94,7 +94,7 @@ public class CmdHelper {
     });
 
 
-    public void stopCmd() throws InterruptedException, IOException {
+    public void stopCmd(String[] cmd) throws InterruptedException, IOException {
         if(! stop){
             if(result == null)System.out.println("the result == null");
             else {
@@ -106,6 +106,7 @@ public class CmdHelper {
                 infoThread.interrupt();
                 errorThread.interrupt();
                 waitThread.interrupt();
+                runtime.exec(cmd);
             }
         }
     }
