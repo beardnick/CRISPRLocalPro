@@ -12,6 +12,7 @@ public class R {
     static Font titleFont = new Font("Dialog" , 1 , 35);
     static Font textFont = new Font("Dialog" , 0 , 25);
     static Font infoFont = new Font("Dialog" , 0 , 22);
+    static Font viceTitleFont = new Font("Dialog" , 1 , 27);
     static final int frame_width = 1500;
     static final int frame_height = 1000;
 

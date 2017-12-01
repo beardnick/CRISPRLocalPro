@@ -89,7 +89,7 @@ public class ReferenceGenome{
   //      frame.setLayout(new BorderLayout());
         mainPanel.setLayout(new BorderLayout());
         title.setFont(R.titleFont);
-        viceTitle.setFont(R.textFont);
+        viceTitle.setFont(R.viceTitleFont);
         referLable.setFont(R.textFont);
         annoLable.setFont(R.textFont);
         referDir.setSize(R.text_width , R.height);
@@ -142,19 +142,19 @@ public class ReferenceGenome{
 
         addComp(con , 0 , 0  ,3 , 2 ,new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(title , con);
-        titlePanel.add(title);
+    //    titlePanel.add(title);
+
+        addComp(con ,4  , 0 , 1 , 1 , new Insets(30 , 10, 10 , 10));
+        layout.setConstraints(helpBtn , con);
+     //   titlePanel.add(helpBtn);
 
         con.anchor = GridBagConstraints.WEST;
-        addComp(con , 3 , 3 , 1 , 2 , new Insets(10 , 10 , 10 ,10));
+        addComp(con , 3 , 0 , 1 , 1, new Insets(10 , 10 , 10 ,10));
         layout.setConstraints(viceTitle , con);
-        titlePanel.add(viceTitle);
+        labelPanel.add(viceTitle);
 
         mainPanel.add(titlePanel , BorderLayout.NORTH);
 //        frame.add(titlePanel , BorderLayout.NORTH);
-
-        addComp(con , 11 , 0 , 1 , 1 , new Insets(30 , 10, 10 , 10));
-        layout.setConstraints(helpBtn , con);
-        labelPanel.add(helpBtn);
 
 
 
@@ -169,7 +169,7 @@ public class ReferenceGenome{
 
         con.fill = GridBagConstraints.HORIZONTAL;
         con.weightx = 1;
-        addComp(con , 10 , 1 , 1 , 1 , new Insets(10 , 30 , 10 , 10));
+        addComp(con , 10 , 1 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(referBtn , con);
         labelPanel.add(referBtn);
 
@@ -181,7 +181,7 @@ public class ReferenceGenome{
         layout.setConstraints(annoDir , con);
         labelPanel.add(annoDir);
 
-        addComp(con , 10 , 2 , 1 , 1 , new Insets(10 , 30 , 10 , 10));
+        addComp(con , 10 , 2 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         con.fill = GridBagConstraints.HORIZONTAL;
         con.weightx = 1;
         layout.setConstraints(annoBtn , con);
@@ -194,7 +194,7 @@ public class ReferenceGenome{
         layout.setConstraints(outDir , con);
         labelPanel.add(outDir);
 
-        addComp(con , 10 , 4 , 1 , 1 , new Insets(10 , 30 , 10 , 10));
+        addComp(con , 10 , 4 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         con.anchor = GridBagConstraints.EAST;
         con.fill = GridBagConstraints.HORIZONTAL;
         con.weightx = 1;
@@ -315,7 +315,7 @@ public class ReferenceGenome{
             }
             @Override
             public String getDescription(){
-                return ".fa  .fasta";
+                return "*.fa ; *.fasta";
             }
         });
         annFile.setDialogTitle("choose a .gff3 file");
@@ -327,7 +327,7 @@ public class ReferenceGenome{
             }
             @Override
             public String getDescription(){
-                return ".gff3";
+                return "*.gff3";
             }
         });
         outputFile.setDialogTitle("choose a directory");
@@ -377,6 +377,7 @@ public class ReferenceGenome{
                     try {
                         information.setVisible(true);
                         cmdHelper.execCmd(commandBuilder());
+                        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -410,41 +411,41 @@ public class ReferenceGenome{
             }
         });
 
-        helpBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    BufferedReader reader;
-                    if(System.getProperty("os.name").toLowerCase().startsWith("lin")
-                            || System.getProperty("os.name").toLowerCase().startsWith("ubu")){
-                        reader = new BufferedReader(new InputStreamReader(
-                                new FileInputStream("src/Resource/help.txt") , "GBK"
-                        ));
-                    }else {
-                        reader = new BufferedReader(new InputStreamReader(
-                                new FileInputStream("src/Resource/help.txt")
-                        ));
-                    }
-                    String temp = "";
-                    warningText.setText("");
-                    while ((temp = reader.readLine()) != null ){
-                        warningText.append(temp + "\n");
-                    }
-                    reader.close();
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                warning.setTitle("help text");
-                warning.setVisible(true);
-            }
-        });
+//        helpBtn.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                try {
+//                    BufferedReader reader;
+//                    if(System.getProperty("os.name").toLowerCase().startsWith("lin")
+//                            || System.getProperty("os.name").toLowerCase().startsWith("ubu")){
+//                        reader = new BufferedReader(new InputStreamReader(
+//                                new FileInputStream("src/Resource/help.txt") , "GBK"
+//                        ));
+//                    }else {
+//                        reader = new BufferedReader(new InputStreamReader(
+//                                new FileInputStream("src/Resource/help.txt")
+//                        ));
+//                    }
+//                    String temp = "";
+//                    warningText.setText("");
+//                    while ((temp = reader.readLine()) != null ){
+//                        warningText.append(temp + "\n");
+//                    }
+//                    reader.close();
+//                } catch (FileNotFoundException e1) {
+//                    e1.printStackTrace();
+//                } catch (IOException e1) {
+//                    e1.printStackTrace();
+//                }
+//                warning.setTitle("help text");
+//                warning.setVisible(true);
+//            }
+//        });
 
     }
 
     public String commandBuilder(){
-        StringBuilder cmd = new StringBuilder("perl ./ProgramFile/CRISPR_Local.pl");
+        StringBuilder cmd = new StringBuilder("perl CRISPR_Local.pl");
 
         //-i Genome
 
