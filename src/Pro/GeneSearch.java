@@ -70,7 +70,7 @@ public class GeneSearch {
 
     public void initView(){
         title.setFont(R.titleFont);
-        viceTitle.setFont(R.textFont);
+        viceTitle.setFont(R.viceTitleFont);
         listLabel.setFont(R.textFont);
         resultLabel.setFont(R.textFont);
         outputLabel.setFont(R.textFont);
@@ -110,27 +110,23 @@ public class GeneSearch {
 
         contentPanel.setLayout(layout);
         contentPanel.setBackground(Color.white);
-        titlePanel.setLayout(layout);
-        titlePanel.setBackground(Color.white);
+//        titlePanel.setLayout(layout);
+//        titlePanel.setBackground(Color.white);
+//
+//
+//        addComp(con , 0 , 0  ,3 , 2 ,new Insets(10 , 10 , 10 , 10));
+//        layout.setConstraints(title , con);
+       // titlePanel.add(title);
 
-
-        addComp(con , 0 , 0  ,3 , 2 ,new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(title , con);
-        titlePanel.add(title);
-
-        con.anchor = GridBagConstraints.WEST;
-        addComp(con , 3 , 3 , 1 , 2 , new Insets(10 , 10 , 10 ,10));
-        layout.setConstraints(viceTitle , con);
-        titlePanel.add(viceTitle);
 
       //  frame.add(titlePanel , BorderLayout.NORTH);
-        mainPanel.add(titlePanel , BorderLayout.NORTH);
+//        mainPanel.add(titlePanel , BorderLayout.NORTH);
 
         //contentPanel
 
-        addComp(con , 9 , 0 , 1 , 1 , new Insets(10 , 10, 10 , 10));
-        layout.setConstraints(helpBtn , con);
-        contentPanel.add(helpBtn);
+//        addComp(con , 9 , 0 , 1 , 1 , new Insets(10 , 10, 10 , 10));
+//        layout.setConstraints(helpBtn , con);
+     //   contentPanel.add(helpBtn);
 
         con.anchor = GridBagConstraints.EAST;//all label align east
         con.fill = GridBagConstraints.NONE; //all label wont expand
@@ -158,6 +154,10 @@ public class GeneSearch {
         con.fill = GridBagConstraints.HORIZONTAL;
         con.weightx = 8;
 
+        addComp(con , 2 , 0 , 1 , 1 , new Insets(10 , 10 , 10 ,10));
+        layout.setConstraints(viceTitle , con);
+        contentPanel.add(viceTitle);
+
         addComp(con , 2 , 1 , 6, 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(listText , con);
         contentPanel.add(listText);
@@ -179,15 +179,15 @@ public class GeneSearch {
         con.weightx = 1;
         con.anchor = GridBagConstraints.WEST;
 
-        addComp(con , 8 , 1 , 1 , 1 , new Insets(10 , 30 , 10 , 10));
+        addComp(con , 8 , 1 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(listBtn , con);
         contentPanel.add(listBtn);
 
-        addComp(con , 8 , 2 , 1 , 1 , new Insets(10 , 30 , 10 , 10));
+        addComp(con , 8 , 2 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(resultBtn , con);
         contentPanel.add(resultBtn);
 
-        addComp(con , 8 , 4 , 1 , 1 , new Insets(10 , 30 , 10 , 10));
+        addComp(con , 8 , 4 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(outputBtn , con);
         contentPanel.add(outputBtn);
 
@@ -248,6 +248,7 @@ public class GeneSearch {
                     try {
                         information.setVisible(true);
                         cmdHelper.execCmd(commandBuilder());
+                        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -281,36 +282,36 @@ public class GeneSearch {
             }
         });
 
-        helpBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    BufferedReader reader;
-                    if(System.getProperty("os.name").toLowerCase().startsWith("lin")
-                            || System.getProperty("os.name").toLowerCase().startsWith("ubu")){
-                        reader = new BufferedReader(new InputStreamReader(
-                                new FileInputStream("src/Resource/help.txt") , "GBK"
-                        ));
-                    }else {
-                        reader = new BufferedReader(new InputStreamReader(
-                                new FileInputStream("src/Resource/help.txt")
-                        ));
-                    }
-                    String temp = "";
-                    warningText.setText("");
-                    while ((temp = reader.readLine()) != null ){
-                        warningText.append(temp + "\n");
-                    }
-                    reader.close();
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                warning.setTitle("help text");
-                warning.setVisible(true);
-            }
-        });
+//        helpBtn.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                try {
+//                    BufferedReader reader;
+//                    if(System.getProperty("os.name").toLowerCase().startsWith("lin")
+//                            || System.getProperty("os.name").toLowerCase().startsWith("ubu")){
+//                        reader = new BufferedReader(new InputStreamReader(
+//                                new FileInputStream("src/Resource/help.txt") , "GBK"
+//                        ));
+//                    }else {
+//                        reader = new BufferedReader(new InputStreamReader(
+//                                new FileInputStream("src/Resource/help.txt")
+//                        ));
+//                    }
+//                    String temp = "";
+//                    warningText.setText("");
+//                    while ((temp = reader.readLine()) != null ){
+//                        warningText.append(temp + "\n");
+//                    }
+//                    reader.close();
+//                } catch (FileNotFoundException e1) {
+//                    e1.printStackTrace();
+//                } catch (IOException e1) {
+//                    e1.printStackTrace();
+//                }
+//                warning.setTitle("help text");
+//                warning.setVisible(true);
+//            }
+//        });
 
     }
 
@@ -326,7 +327,7 @@ public class GeneSearch {
 
             @Override
             public String getDescription() {
-                return ".txt" ;
+                return "*.txt" ;
             }
         });
         outputText.setText(System.getProperty("user.dir"));
@@ -340,7 +341,7 @@ public class GeneSearch {
 
 
     private String commandBuilder(){
-        StringBuilder cmd = new StringBuilder("perl ./ProgramFile/Gene_search.pl");
+        StringBuilder cmd = new StringBuilder("perl Gene_search.pl");
 
         cmd.append(" -l " + listText.getText() );
         cmd.append(" -i " + resultText.getText() );

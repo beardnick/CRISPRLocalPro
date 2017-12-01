@@ -71,7 +71,7 @@ public class UserData {
 
     public void initView(){
         title.setFont(R.titleFont);
-        viceTitle.setFont(R.textFont);
+        viceTitle.setFont(R.viceTitleFont);
 
         dataLable.setFont(R.textFont);
         outputLable.setFont(R.textFont);
@@ -120,19 +120,19 @@ public class UserData {
 
         addComp(con , 0 , 0  ,3 , 2 ,new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(title , con);
-        titlePanel.add(title);
+       // titlePanel.add(title);
 
         con.anchor = GridBagConstraints.WEST;
-        addComp(con , 4 , 3 , 1 , 5 , new Insets(10 , 10 , 10 ,10));
+        addComp(con , 2 , 0 , 1 , 1, new Insets(10 , 10 , 10 ,10));
         layout.setConstraints(viceTitle , con);
-        titlePanel.add(viceTitle);
+        contentPanel.add(viceTitle);
 
 
         //contentPanel
 
-        addComp(con , 9 , 0 , 1 , 1 , new Insets(10 , 30, 10 , 10));
+        addComp(con , 9 , 0 , 1 , 1 , new Insets(30 , 10, 10 , 10));
         layout.setConstraints(helpBtn , con);
-        contentPanel.add(helpBtn);
+       // contentPanel.add(helpBtn);
 
         con.anchor = GridBagConstraints.EAST;//all label align east
         con.fill = GridBagConstraints.NONE; //all label wont expand
@@ -165,16 +165,16 @@ public class UserData {
 
 
         con.anchor = GridBagConstraints.WEST;
-        addComp(con , 8 , 1 , 1 , 1 , new Insets(10 , 30 , 10 , 10));
+        addComp(con , 8 , 1 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(dataBtn , con);
         contentPanel.add(dataBtn);
 
-        addComp(con , 8 , 2 , 1 , 1 , new Insets(10 , 30 , 10 , 10));
+        addComp(con , 8 , 2 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(annoBtn , con);
         contentPanel.add(annoBtn);
 
 
-        addComp(con , 8 , 3 , 1 , 1 , new Insets(10 , 30 , 10 , 10));
+        addComp(con , 8 , 3 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(outputBtn , con);
         contentPanel.add(outputBtn);
 
@@ -239,7 +239,7 @@ public class UserData {
             }
             @Override
             public String getDescription(){
-                return ".gff3";
+                return "*.gff3";
             }
         });
         outputFile.setDialogTitle("choose a directory");
@@ -266,16 +266,16 @@ public class UserData {
             @Override
             public String getDescription() {
                 return
-                        ".bam " +
-                                ".sam " +
-                                ".fa " +
-                                ".fasta " +
-                                ".fa.gz " +
-                                ".fasta.gz " +
-                                ".fq " +
-                                ".fastq " +
-                                ".fq.gz " +
-                                ".fastq.gz ";
+                        "*.bam ;" +
+                                "*.sam ;" +
+                                "*.fa ;" +
+                                "*.fasta ;" +
+                                "*.fa.gz ;" +
+                                "*.fasta.gz ;" +
+                                "*.fq ;" +
+                                "*.fastq ;" +
+                                "*.fq.gz ;" +
+                                "*.fastq.gz ;";
             }
         });
         outputFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -339,6 +339,7 @@ public class UserData {
                     try {
                         information.setVisible(true);
                         cmdHelper.execCmd(commandBuilder());
+                        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -351,36 +352,36 @@ public class UserData {
             }
         });
 
-        helpBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    BufferedReader reader;
-                    if(System.getProperty("os.name").toLowerCase().startsWith("lin")
-                            || System.getProperty("os.name").toLowerCase().startsWith("ubu")){
-                        reader = new BufferedReader(new InputStreamReader(
-                                new FileInputStream("src/Resource/help.txt") , "GBK"
-                        ));
-                    }else {
-                        reader = new BufferedReader(new InputStreamReader(
-                                new FileInputStream("src/Resource/help.txt")
-                        ));
-                    }
-                    String temp = "";
-                    warningText.setText("");
-                    while ((temp = reader.readLine()) != null ){
-                        warningText.append(temp + "\n");
-                    }
-                    reader.close();
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                warning.setTitle("help text");
-                warning.setVisible(true);
-            }
-        });
+//        helpBtn.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                try {
+//                    BufferedReader reader;
+//                    if(System.getProperty("os.name").toLowerCase().startsWith("lin")
+//                            || System.getProperty("os.name").toLowerCase().startsWith("ubu")){
+//                        reader = new BufferedReader(new InputStreamReader(
+//                                new FileInputStream("src/Resource/help.txt") , "GBK"
+//                        ));
+//                    }else {
+//                        reader = new BufferedReader(new InputStreamReader(
+//                                new FileInputStream("src/Resource/help.txt")
+//                        ));
+//                    }
+//                    String temp = "";
+//                    warningText.setText("");
+//                    while ((temp = reader.readLine()) != null ){
+//                        warningText.append(temp + "\n");
+//                    }
+//                    reader.close();
+//                } catch (FileNotFoundException e1) {
+//                    e1.printStackTrace();
+//                } catch (IOException e1) {
+//                    e1.printStackTrace();
+//                }
+//                warning.setTitle("help text");
+//                warning.setVisible(true);
+//            }
+//        });
 
 
 
@@ -409,7 +410,7 @@ public class UserData {
     }
 
     private String commandBuilder(){
-        StringBuilder cmd = new StringBuilder("perl ./ProgramFile/User_sgRNA.pl");
+        StringBuilder cmd = new StringBuilder("perl User_sgRNA.pl");
 
         cmd.append(" -i " + dataText.getText());
 
