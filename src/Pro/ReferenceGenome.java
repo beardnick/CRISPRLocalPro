@@ -79,6 +79,7 @@ public class ReferenceGenome{
 
     private String helpCmd = "!!!!!";//to make sure the same bat file will only be created once
 
+    public static String[] stopCmd = {"/bin/sh" , "-c" , "ps -ef |grep -e 'CRISPR_Local.pl' -e 'rs2_score_calculator.py' -e 'seqmap-1.0.12-linux-64' -e 'sgRNA_CFD.pl' -e 'cfd-score-calculator.py'|cut -c 9-15 |xargs kill -s 9"};
 
 
     //   private CmdHelper cmdHelper = new CmdHelper(info);
@@ -398,7 +399,7 @@ public class ReferenceGenome{
                 if(confirm == JOptionPane.YES_OPTION ){
                     try {
                         System.out.println(confirm);
-                        cmdHelper.stopCmd();
+                        cmdHelper.stopCmd(stopCmd);
                         information.dispose();
                         frame.dispose();
                     } catch (InterruptedException e1) {
