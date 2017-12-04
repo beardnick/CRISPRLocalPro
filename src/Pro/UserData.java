@@ -1,6 +1,5 @@
 package Pro;
 
-import Util.CmdHelper;
 import Util.MyJButton;
 
 import javax.swing.*;
@@ -8,24 +7,20 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.*;
 import java.util.regex.Pattern;
 
 /**
  * Created by asus on 2017/11/27.
  */
-public class UserData {
+public class UserData extends Window implements WindowCallBack {
 
     public UserData(JPanel panel , JFrame frame){
+        super(frame , stopCmd);
         this.mainPanel = panel;
-        this.frame = frame;
-        information = new JDialog(frame , "information" , false);
-        warning = new JDialog(frame , "warning" , true);
+        setCallBack(this);
     }
 
-    private JFrame frame ;
     private JPanel mainPanel;
 
     private JLabel title = new JLabel("CRISPR-Local");
@@ -44,9 +39,6 @@ public class UserData {
     private MyJButton dataBtn = new MyJButton();
     private MyJButton annoBtn = new MyJButton();
     private MyJButton outputBtn = new MyJButton();
-    private MyJButton helpBtn = new MyJButton();
-
-    private MyJButton submitBtn = new MyJButton();
 
     private JPanel titlePanel = new JPanel();
     private JPanel contentPanel = new JPanel();
@@ -54,19 +46,10 @@ public class UserData {
     private GridBagConstraints con = new GridBagConstraints();
     private GridBagLayout layout = new GridBagLayout();
 
-
-    private TextArea info = new TextArea("information" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
-    private JDialog information;
     private JFileChooser annFile = new JFileChooser();
     private JFileChooser dataFile = new JFileChooser();
     private JFileChooser outputFile = new JFileChooser();
-    private String helpCmd = "!!!!";
-    private File batFile;
 
-    private TextArea warningText = new TextArea("warning" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
-    private JDialog warning;
-
-    private CmdHelper cmdHelper = new CmdHelper(info);
     private StringBuilder dataString = new StringBuilder("");
 
     public static String[] stopCmd = {"/bin/sh" , "-c" ,
@@ -81,9 +64,6 @@ public class UserData {
         annoLable.setForeground(Color.gray);
         threadsLable.setFont(R.textFont);
 
-        information.add(info);
-        information.setSize(1500 , 500);
-        information.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 
 
         dataText.setFont(R.textFont);
@@ -94,22 +74,11 @@ public class UserData {
         threadsText.setFont(R.textFont);
 
         ImageIcon dirIcon = new ImageIcon("src/Resource/dir.png");
-        ImageIcon submitIcon = new ImageIcon("src/Resource/submit.png");
-        helpBtn.setIcon(new ImageIcon("src/Resource/help.png"));
         dataBtn.setIcon(dirIcon);
         annoBtn.setIcon(dirIcon);
         outputBtn.setIcon(dirIcon);
 
-        submitBtn.setIcon(submitIcon);
-
-        warningText.setFont(R.infoFont);
-        warning.add(warningText);
-        warning.setResizable(false);
-        warning.setSize(1000 , 500);
-
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          mainPanel.setLayout(new BorderLayout());
-//        frame.setLayout(new BorderLayout());
 
         con.fill = GridBagConstraints.BOTH;
         con.weightx = 1;
@@ -122,7 +91,6 @@ public class UserData {
 
         addComp(con , 0 , 0  ,3 , 2 ,new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(title , con);
-       // titlePanel.add(title);
 
         con.anchor = GridBagConstraints.WEST;
         addComp(con , 2 , 0 , 1 , 1, new Insets(10 , 10 , 10 ,10));
@@ -131,10 +99,6 @@ public class UserData {
 
 
         //contentPanel
-
-        addComp(con , 9 , 0 , 1 , 1 , new Insets(30 , 10, 10 , 10));
-        layout.setConstraints(helpBtn , con);
-       // contentPanel.add(helpBtn);
 
         con.anchor = GridBagConstraints.EAST;//all label align east
         con.fill = GridBagConstraints.NONE; //all label wont expand
@@ -334,57 +298,9 @@ public class UserData {
             }
         });
 
-        submitBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(! information.isVisible() && checkData()){
-                    try {
-                        information.setVisible(true);
-                        cmdHelper.execCmd(commandBuilder());
-                        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-                else {
-                    if(! checkData()){
-                        warning.setTitle("warning");
-                        warning.setVisible(true);
-                    }
-                }
-
-            }
-        });
-
-
-
-        information.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                int confirm =  JOptionPane.showConfirmDialog(frame ,
-                        "do you really want to stop the process ?" , "warning" , JOptionPane.YES_NO_OPTION);
-                if(confirm == JOptionPane.YES_OPTION ){
-                    try {
-                        System.out.println(confirm);
-                        cmdHelper.stopCmd(stopCmd);
-                        information.dispose();
-                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-//                        frame.dispose();
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-
-            }
-        });
-
-
     }
 
-    private String commandBuilder(){
+    public String commandBuilder(){
         StringBuilder cmd = new StringBuilder("perl User_sgRNA.pl");
 
         cmd.append(" -i " + dataText.getText());
@@ -401,9 +317,7 @@ public class UserData {
         return cmd.toString();
     }
 
-
-
-    private boolean checkData(){
+    public boolean checkData(){
         warningText.setText("");
         boolean dataValid = true;
         textFieldEmpty(dataText , Color.pink, "please choose your data file\n" );
@@ -422,29 +336,6 @@ public class UserData {
         }
         return warningText.getText().equals("");
 
-    }
-
-    public boolean textFieldEmpty(JTextField text , Color color , String notice  ){
-        boolean isEmpty;
-        if(text.getText().length() == 0){
-            isEmpty =true;
-            warningText.append(notice);
-            text.setOpaque(true);
-            text.setBackground(color);
-        }else {
-            isEmpty = false;
-            text.setOpaque(false);
-        }
-        return isEmpty;
-    }
-
-
-    private void addComp(GridBagConstraints constraints , int x , int y , int gridWidth , int gridHeight , Insets insets){
-        constraints.gridx = x;
-        constraints.gridy = y;
-        constraints.gridheight = gridHeight;
-        constraints.gridwidth = gridWidth;
-        constraints.insets = insets;
     }
 
 }

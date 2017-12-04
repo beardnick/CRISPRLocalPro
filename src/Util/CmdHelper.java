@@ -13,12 +13,14 @@ import java.io.*;
 public class CmdHelper {
     private java.lang.Runtime runtime = Runtime.getRuntime();
     private java.lang.Process result;
-    public TextArea info;
+    private TextArea info;
+    private Dialog information;
     private volatile boolean stop = false;
     private String cmdString = "";
 
-    public CmdHelper(TextArea info) {
+    public CmdHelper(TextArea info , Dialog information) {
         this.info = info;
+        this.information = information;
     }
     private volatile BufferedReader infoReader;
     private volatile BufferedReader errorReader;
@@ -69,8 +71,7 @@ public class CmdHelper {
         public void run() {
 
                 try {
-                    //TODO: 2017/12/4 change the cmd to compatibilable to Linux
-                    String[] cmd = {"cmd.exe" , "/c" , cmdString};
+                    String[] cmd = {"/bin/sh" , "-c" , cmdString};
                     result = runtime.exec(cmd);
                     infoReader = new BufferedReader(new
                             InputStreamReader(result.getInputStream() , "GBK"
@@ -86,6 +87,7 @@ public class CmdHelper {
                         info.append("INFO>    the process is over\n");
                         info.append("INFO>    the window will close in 3 seconds later\n");
                         Thread.sleep(3000);
+                        information.dispose();
                     }
                     System.out.println("wait for has been executed");
                 } catch (IOException e) {

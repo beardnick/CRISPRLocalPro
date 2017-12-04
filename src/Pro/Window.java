@@ -20,12 +20,11 @@ interface WindowCallBack{
  * Created by asus on 2017/12/4.
  */
 public class Window {
-    private JFrame frame;
     private CmdHelper cmdHelper;
     private String[] stopCmd;
     private WindowCallBack callBack;
 
-
+    public JFrame frame;
     public MyJButton submitBtn = new MyJButton();
     public TextArea info = new TextArea("information" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
     public TextArea warningText = new TextArea("warning" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
@@ -35,7 +34,7 @@ public class Window {
 
     public Window(JFrame frame , String[] stopCmd ){
         this.frame = frame;
-        this.cmdHelper = new CmdHelper(info);
+        this.cmdHelper = new CmdHelper(info , information);
         this.stopCmd = stopCmd;
         information = new JDialog(frame , "information" , false);
         warning = new JDialog(frame , "warning" , true);
@@ -56,7 +55,6 @@ public class Window {
         warning.add(warningText);
         warning.setResizable(false);
         warning.setSize(1000 , 500);
-
         submitBtn.setIcon(new ImageIcon("src/Resource/submit.png"));
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,7 +95,6 @@ public class Window {
                         cmdHelper.stopCmd(stopCmd);
                         information.dispose();
                         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//                        frame.dispose();
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     } catch (IOException e1) {
