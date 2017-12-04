@@ -92,11 +92,10 @@ public class CmdHelper {
                     System.out.println("wait for has been executed");
                 } catch (IOException e) {
                     e.printStackTrace();
+                    info.append("ERROR>    " + e.getMessage());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-
         }
     }
 
