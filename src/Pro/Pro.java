@@ -41,6 +41,7 @@ public class Pro{
 
 
     public void initView(){
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         referenceBtn.setIcon(new ImageIcon("src/Resource/R.png"));
         userDataBtn.setIcon(new ImageIcon("src/Resource/U.png"));
         geneSearchBtn.setIcon(new ImageIcon("src/Resource/D.png"));
