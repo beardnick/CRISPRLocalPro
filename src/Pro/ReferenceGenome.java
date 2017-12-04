@@ -1,6 +1,5 @@
 package Pro;
 
-import Util.CmdHelper;
 import Util.MyJButton;
 
 import javax.swing.*;
@@ -23,13 +22,8 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         super(frame , stopCmd);
        this.mainPanel = panel;
         setCallBack(this);
-//        this.frame = frame;
-//        information = new JDialog(frame , "information" , false);
-//        warning = new JDialog(frame , "warning" , true);
     }
 
-
-    private JFrame frame ;
     private JPanel mainPanel;
 
     private JLabel referLable = new JLabel("Reference genome :");
@@ -56,8 +50,6 @@ public class ReferenceGenome extends Window implements WindowCallBack{
     private MyJButton referBtn = new MyJButton();
     private MyJButton annoBtn = new MyJButton();
     private MyJButton outputBtn = new MyJButton();
-//    private MyJButton submitBtn = new MyJButton();
-    private MyJButton helpBtn = new MyJButton();
 
 
     private JLabel title = new JLabel("CRISPR-Local");
@@ -74,9 +66,8 @@ public class ReferenceGenome extends Window implements WindowCallBack{
     private JPanel titlePanel = new JPanel();
     private JPanel labelPanel = new JPanel();
 
-    // TODO: 2017/12/4 change the stop cmd to Linux mode
-    public  static String[] stopCmd = {"cmd.exe" , "/c" , "taskkill /f /im perl.exe"};
-//    public static String[] stopCmd = {"/bin/sh" , "-c" , "ps -ef |grep -e 'CRISPR_Local.pl' -e 'rs2_score_calculator.py' -e 'seqmap-1.0.12-linux-64' -e 'sgRNA_CFD.pl' -e 'cfd-score-calculator.py'|cut -c 9-15 |xargs kill -s 9"};
+//    public  static String[] stopCmd = {"cmd.exe" , "/c" , "taskkill /f /im perl.exe"};
+    public static String[] stopCmd = {"/bin/sh" , "-c" , "ps -ef |grep -e 'CRISPR_Local.pl' -e 'rs2_score_calculator.py' -e 'seqmap-1.0.12-linux-64' -e 'sgRNA_CFD.pl' -e 'cfd-score-calculator.py'|cut -c 9-15 |xargs kill -s 9"};
 
 
 
@@ -108,8 +99,6 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         nt.setFont(R.textFont);
         newNt.setFont(R.textFont);
         Icon dirIcon = new ImageIcon("src/Resource/dir.png");
-//        submitBtn.setIcon(new ImageIcon("src/Resource/submit.png"));
-        helpBtn.setIcon(new ImageIcon("src/Resource/help.png"));
         referBtn.setIcon(dirIcon);
         referBtn.setBackground(Color.white);
         annoBtn.setIcon(dirIcon);
@@ -127,11 +116,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
 
         addComp(con , 0 , 0  ,3 , 2 ,new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(title , con);
-    //    titlePanel.add(title);
 
-        addComp(con ,4  , 0 , 1 , 1 , new Insets(30 , 10, 10 , 10));
-        layout.setConstraints(helpBtn , con);
-     //   titlePanel.add(helpBtn);
 
         con.anchor = GridBagConstraints.WEST;
         addComp(con , 3 , 0 , 1 , 1, new Insets(10 , 10 , 10 ,10));
@@ -139,7 +124,6 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         labelPanel.add(viceTitle);
 
         mainPanel.add(titlePanel , BorderLayout.NORTH);
-//        frame.add(titlePanel , BorderLayout.NORTH);
 
 
 
@@ -239,7 +223,6 @@ public class ReferenceGenome extends Window implements WindowCallBack{
 
         addComp(con , 0 , 3 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(option , con);
-//        labelPanel.add(option);
 
         con.anchor = GridBagConstraints.EAST;
         addComp(con , 0 , 4 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
@@ -275,11 +258,8 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         con.fill = GridBagConstraints.VERTICAL;
         con.anchor = GridBagConstraints.WEST;
         layout.setConstraints(labelPanel , con);
-//        frame.add(labelPanel , BorderLayout.CENTER);
         mainPanel.add(labelPanel , BorderLayout.CENTER);
-      //  frame.add(mainPanel);
 
-//        frame.setVisible(true);
     }
 
 
@@ -435,7 +415,6 @@ public class ReferenceGenome extends Window implements WindowCallBack{
 
         return warningText.getText().length() == 0;
     }
-
 
 }
 

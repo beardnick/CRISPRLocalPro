@@ -1,30 +1,26 @@
 package Pro;
 
-import Util.CmdHelper;
 import Util.MyJButton;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.*;
 import java.util.regex.Pattern;
 
 /**
  * Created by asus on 2017/11/27.
  */
-public class GeneSearch {
+public class GeneSearch extends Window implements WindowCallBack {
 
     public GeneSearch(JPanel panel , JFrame frame){
+        super(frame , stopCmd);
         this.mainPanel = panel;
-        this.frame = frame;
-        information = new JDialog(frame , "information" , false);
-        warning = new JDialog(frame , "warning" , true);
+        setCallBack(this);
     }
 
-    private JFrame frame ;
+
     private JPanel mainPanel;
 
     private JLabel title = new JLabel("CRISPR-Local");
@@ -47,14 +43,9 @@ public class GeneSearch {
     private MyJButton resultBtn = new MyJButton();
     private MyJButton userBtn = new MyJButton();
     private MyJButton outputBtn = new MyJButton();
-    private MyJButton submitBtn = new MyJButton();
-    private MyJButton helpBtn = new MyJButton();
 
     private JPanel titlePanel = new JPanel();
     private JPanel contentPanel = new JPanel();
-
-    private TextArea info = new TextArea("information" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
-    private JDialog information;
 
     private GridBagConstraints con = new GridBagConstraints();
     private GridBagLayout layout = new GridBagLayout();
@@ -63,10 +54,6 @@ public class GeneSearch {
     private JFileChooser resultFile= new JFileChooser();
     private JFileChooser outputFile= new JFileChooser();
 
-    private CmdHelper cmdHelper = new CmdHelper(info);
-
-    private TextArea warningText = new TextArea("warning" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
-    private JDialog warning;
 
     public static String[] stopCmd = {"/bin/sh" , "-c" ,
             "ps -ef |grep -e 'Gene_search.pl'|cut -c 9-15 |xargs kill -s 9"};
@@ -90,25 +77,12 @@ public class GeneSearch {
         numResultText.setFont(R.textFont);
 
         Icon dirIcon = new ImageIcon("src/Resource/dir.png");
-        submitBtn.setIcon(new ImageIcon("src/Resource/submit.png"));
-        helpBtn.setIcon(new ImageIcon("src/Resource/help.png"));
         listBtn.setIcon(dirIcon);
         resultBtn.setIcon(dirIcon);
         userBtn.setIcon(dirIcon);
         outputBtn.setIcon(dirIcon);
 
-        warningText.setFont(R.infoFont);
-        warning.add(warningText);
-        warning.setResizable(false);
-        warning.setSize(1000 , 500);
-        information.add(info);
-        info.setBackground(Color.white);
-        information.setSize(1000 , 500);
-        information.setResizable(false);
-        information.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      //  frame.setLayout(new BorderLayout());
 
         mainPanel.setLayout(new BorderLayout());
 
@@ -203,8 +177,6 @@ public class GeneSearch {
 
         frame.getContentPane().setBackground(Color.white);
         frame.setSize(R.frame_width , R.frame_height);
-//        frame.setVisible(true);
-
 
     }
 
@@ -239,50 +211,6 @@ public class GeneSearch {
             }
         });
 
-//        submitBtn.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                if(! information.isVisible() && checkData()){
-//                    try {
-//                        information.setVisible(true);
-//                        cmdHelper.execCmd(commandBuilder());
-//                        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-//                    } catch (IOException e1) {
-//                        e1.printStackTrace();
-//                    }
-//                }
-//                else {
-//                    if(! checkData()){
-//                        warning.setTitle("warning");
-//                        warning.setVisible(true);
-//                    }
-//                }
-//
-//            }
-//        });
-//
-//        information.addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//                int confirm =  JOptionPane.showConfirmDialog(frame ,
-//                        "do you really want to stop the process ?" , "warning" , JOptionPane.YES_NO_OPTION);
-//                if(confirm == JOptionPane.YES_OPTION ){
-//                    try {
-//                        System.out.println(confirm);
-//                        cmdHelper.stopCmd(stopCmd);
-//                        information.dispose();
-//                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-////                        frame.dispose();
-//                    } catch (InterruptedException e1) {
-//                        e1.printStackTrace();
-//                    } catch (IOException e1) {
-//                        e1.printStackTrace();
-//                    }
-//                }
-//
-//            }
-//        });
-
     }
 
     public void initData(){
@@ -310,7 +238,7 @@ public class GeneSearch {
 
 
 
-    private String commandBuilder(){
+    public String commandBuilder(){
         StringBuilder cmd = new StringBuilder("perl Gene_search.pl");
 
         cmd.append("-l " + listText.getText());
@@ -331,7 +259,7 @@ public class GeneSearch {
 
 
 
-    private boolean checkData(){
+       public boolean checkData(){
         warningText.setText("");
         textFieldEmpty(listText , Color.pink , "please choose the gene list file\n");
         textFieldEmpty(resultText , Color.pink , "please choose the result file\n");
@@ -349,34 +277,7 @@ public class GeneSearch {
         System.out.println(warningText.getText().equals(""));
         System.out.println(warningText.getText().toString());
 
-        return warningText.getText().equals("");
+        return warningText.getText().length() == 0;
     }
-
-    private boolean textFieldEmpty(JTextField text , Color color , String notice  ){
-        boolean isEmpty;
-        if(text.getText().length() == 0){
-            isEmpty =true;
-            warningText.append(notice);
-            text.setOpaque(true);
-            text.setBackground(color);
-        }else {
-            isEmpty = false;
-            text.setOpaque(false);
-        }
-        return isEmpty;
-    }
-
-
-
-
-    private void addComp(GridBagConstraints constraints , int x , int y , int gridWidth , int gridHeight , Insets insets){
-        constraints.gridx = x;
-        constraints.gridy = y;
-        constraints.gridheight = gridHeight;
-        constraints.gridwidth = gridWidth;
-        constraints.insets = insets;
-    }
-
-
 
 }
