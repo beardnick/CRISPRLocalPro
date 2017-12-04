@@ -22,7 +22,6 @@ public class CmdHelper {
     }
     private volatile BufferedReader infoReader;
     private volatile BufferedReader errorReader;
-    private OutputStream cmdWriter;
 
     private Thread errorThread;
     private Thread infoThread;
@@ -33,10 +32,6 @@ public class CmdHelper {
         if(! stop){
             if(result == null)System.out.println("the result == null");
             else {
-//                cmdWriter = result.getOutputStream();
-//                stop = true;
-//                cmdWriter.write("\003\ny\n".getBytes());
-//                cmdWriter.flush();
                 stop = true;
                 result.destroy();
                 runtime.exec(cmd);
@@ -56,7 +51,7 @@ public class CmdHelper {
 
     public void execCmd(String cmd) throws IOException {
         stop = false;
-        info.setText("the process is runing ...\n" +
+        info.setText("the process is running ...\n" +
                 "please wait\n");
         infoThread = new Thread(new InfoThread());
         errorThread = new Thread(new ErrorThread());
@@ -84,9 +79,14 @@ public class CmdHelper {
                             InputStreamReader(result.getErrorStream() , "GBK"
                     ));
                     errorThread.start();
-//                cmdWriter = result.getOutputStream();
                     infoThread.start();
                     result.waitFor();
+                    System.out.println("PROCESS EXIT VALUE : " + result.exitValue());
+                    if(result.exitValue() == 0){
+                        info.append("INFO>    the process is over\n");
+                        info.append("INFO>    the window will close in 3 seconds later\n");
+                        Thread.sleep(3000);
+                    }
                     System.out.println("wait for has been executed");
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -132,7 +132,6 @@ public class CmdHelper {
                             System.out.println("ERROR>    " + temp);
                             info.append("ERROR>    " + temp + "\n");
                         }
-
                     }
                 }
             } catch (IOException e) {
