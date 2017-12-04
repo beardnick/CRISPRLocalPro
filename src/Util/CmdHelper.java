@@ -14,11 +14,11 @@ public class CmdHelper {
     private java.lang.Runtime runtime = Runtime.getRuntime();
     private java.lang.Process result;
     private TextArea info;
-    private Dialog information;
+    private JDialog information;
     private volatile boolean stop = false;
     private String cmdString = "";
 
-    public CmdHelper(TextArea info , Dialog information) {
+    public CmdHelper(TextArea info , JDialog information) {
         this.info = info;
         this.information = information;
     }
@@ -71,7 +71,8 @@ public class CmdHelper {
         public void run() {
 
                 try {
-                    String[] cmd = {"/bin/sh" , "-c" , cmdString};
+//                    String[] cmd = {"cmd.exe" , "/c" , "tasklist"};
+                   String[] cmd = {"/bin/sh" , "-c" , cmdString};
                     result = runtime.exec(cmd);
                     infoReader = new BufferedReader(new
                             InputStreamReader(result.getInputStream() , "GBK"
@@ -84,6 +85,7 @@ public class CmdHelper {
                     result.waitFor();
                     System.out.println("PROCESS EXIT VALUE : " + result.exitValue());
                     if(result.exitValue() == 0){
+                        Thread.sleep(2000);
                         info.append("INFO>    the process is over\n");
                         info.append("INFO>    the window will close in 3 seconds later\n");
                         Thread.sleep(3000);

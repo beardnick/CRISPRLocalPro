@@ -3,6 +3,8 @@ package Pro;
 import Util.MyJButton;
 
 import javax.swing.*;
+import javax.swing.filechooser.*;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -52,6 +54,7 @@ public class GeneSearch extends Window implements WindowCallBack {
 
     private JFileChooser listFile= new JFileChooser();
     private JFileChooser resultFile= new JFileChooser();
+    private JFileChooser userFile = new JFileChooser();
     private JFileChooser outputFile= new JFileChooser();
 
 
@@ -82,7 +85,6 @@ public class GeneSearch extends Window implements WindowCallBack {
         userBtn.setIcon(dirIcon);
         outputBtn.setIcon(dirIcon);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         mainPanel.setLayout(new BorderLayout());
 
@@ -211,12 +213,22 @@ public class GeneSearch extends Window implements WindowCallBack {
             }
         });
 
+        userBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(userFile.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION){
+                    userText.setText(userFile.getSelectedFile().getPath());
+                    userText.setEditable(false);
+                }
+            }
+        });
+
     }
 
     public void initData(){
         numResultText.setText("1");
 
-        listFile.setFileFilter(new javax.swing.filechooser.FileFilter() {
+        listFile.setFileFilter(new FileFilter() {
             @Override
             public boolean accept(File f) {
                 if(f.isDirectory())return true;
@@ -232,6 +244,7 @@ public class GeneSearch extends Window implements WindowCallBack {
 
         listFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
         resultFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        userFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
         outputFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
     }
@@ -241,14 +254,14 @@ public class GeneSearch extends Window implements WindowCallBack {
     public String commandBuilder(){
         StringBuilder cmd = new StringBuilder("perl Gene_search.pl");
 
-        cmd.append("-l " + listText.getText());
-        cmd.append("-i " + resultText.getText());
+        cmd.append(" -l " + listText.getText());
+        cmd.append(" -i " + resultText.getText());
         if(userText.getText().length() > 0)
-            cmd.append("-u " + userText.getText());
+            cmd.append(" -u " + userText.getText());
         if(outputText.getText().length() > 0)
-            cmd.append("-o " + outputText.getText());
+            cmd.append(" -o " + outputText.getText());
         if(numResultText.getText().length() > 0)
-            cmd.append("-N " + numResultText.getText());
+            cmd.append(" -N " + numResultText.getText());
 
 
         System.out.println(cmd.toString());
