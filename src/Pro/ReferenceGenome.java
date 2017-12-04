@@ -67,14 +67,14 @@ public class ReferenceGenome extends Window implements WindowCallBack{
     private JPanel labelPanel = new JPanel();
 
 //    public  static String[] stopCmd = {"cmd.exe" , "/c" , "taskkill /f /im perl.exe"};
-    public static String[] stopCmd = {"/bin/sh" , "-c" , "ps -ef |grep -e 'CRISPR_Local.pl' -e 'rs2_score_calculator.py' -e 'seqmap-1.0.12-linux-64' -e 'sgRNA_CFD.pl' -e 'cfd-score-calculator.py'|cut -c 9-15 |xargs kill -s 9"};
+    public static String[] stopCmd = {"/bin/sh" , "-c" ,
+        "ps -ef |grep -e 'CRISPR_Local.pl' -e 'rs2_score_calculator.py' -e 'seqmap-1.0.12-linux-64' -e 'sgRNA_CFD.pl' -e 'cfd-score-calculator.py'|cut -c 9-15 |xargs kill -s 9"};
 
 
 
 
 
     public void initView(){
-  //      frame.setLayout(new BorderLayout());
         mainPanel.setLayout(new BorderLayout());
         title.setFont(R.titleFont);
         viceTitle.setFont(R.viceTitleFont);
