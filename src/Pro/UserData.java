@@ -21,7 +21,8 @@ public class UserData {
     public UserData(JPanel panel , JFrame frame){
         this.mainPanel = panel;
         this.frame = frame;
-
+        information = new JDialog(frame , "information" , false);
+        warning = new JDialog(frame , "warning" , true);
     }
 
     private JFrame frame ;
@@ -55,7 +56,7 @@ public class UserData {
 
 
     private TextArea info = new TextArea("information" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
-    private JDialog information = new JDialog(frame , "information" , false);
+    private JDialog information;
     private JFileChooser annFile = new JFileChooser();
     private JFileChooser dataFile = new JFileChooser();
     private JFileChooser outputFile = new JFileChooser();
@@ -63,7 +64,7 @@ public class UserData {
     private File batFile;
 
     private TextArea warningText = new TextArea("warning" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
-    private JDialog warning = new JDialog(frame , "warning" , true);
+    private JDialog warning;
 
     private CmdHelper cmdHelper = new CmdHelper(info);
     private StringBuilder dataString = new StringBuilder("");
@@ -355,37 +356,6 @@ public class UserData {
             }
         });
 
-//        helpBtn.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                try {
-//                    BufferedReader reader;
-//                    if(System.getProperty("os.name").toLowerCase().startsWith("lin")
-//                            || System.getProperty("os.name").toLowerCase().startsWith("ubu")){
-//                        reader = new BufferedReader(new InputStreamReader(
-//                                new FileInputStream("src/Resource/help.txt") , "GBK"
-//                        ));
-//                    }else {
-//                        reader = new BufferedReader(new InputStreamReader(
-//                                new FileInputStream("src/Resource/help.txt")
-//                        ));
-//                    }
-//                    String temp = "";
-//                    warningText.setText("");
-//                    while ((temp = reader.readLine()) != null ){
-//                        warningText.append(temp + "\n");
-//                    }
-//                    reader.close();
-//                } catch (FileNotFoundException e1) {
-//                    e1.printStackTrace();
-//                } catch (IOException e1) {
-//                    e1.printStackTrace();
-//                }
-//                warning.setTitle("help text");
-//                warning.setVisible(true);
-//            }
-//        });
-
 
 
         information.addWindowListener(new WindowAdapter() {
@@ -454,7 +424,7 @@ public class UserData {
 
     }
 
-    private boolean textFieldEmpty(JTextField text , Color color , String notice  ){
+    public boolean textFieldEmpty(JTextField text , Color color , String notice  ){
         boolean isEmpty;
         if(text.getText().length() == 0){
             isEmpty =true;
@@ -467,28 +437,6 @@ public class UserData {
         }
         return isEmpty;
     }
-
-//    private boolean batBuilder(String cmd) throws IOException {
-//        boolean isTheSameCmd = false;
-//        if(! (isTheSameCmd = cmd.equals(helpCmd)) ){
-//            helpCmd = cmd;
-//            batFile = new File("userData.bat");
-//            int i = 1;
-//            while (batFile.exists()){
-//                batFile = new File("userData(" + String.valueOf(i) + ")" + ".bat");
-//                i ++;
-//            }
-//            System.out.println(batFile.getName());
-//            batFile.createNewFile();
-//            FileWriter writer = new FileWriter(batFile);
-//            writer.write(cmd);
-//            writer.close();
-//        }
-//
-//        return ! isTheSameCmd;
-//    }
-
-
 
 
     private void addComp(GridBagConstraints constraints , int x , int y , int gridWidth , int gridHeight , Insets insets){

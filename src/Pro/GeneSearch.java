@@ -20,7 +20,8 @@ public class GeneSearch {
     public GeneSearch(JPanel panel , JFrame frame){
         this.mainPanel = panel;
         this.frame = frame;
-
+        information = new JDialog(frame , "information" , false);
+        warning = new JDialog(frame , "warning" , true);
     }
 
     private JFrame frame ;
@@ -53,13 +54,10 @@ public class GeneSearch {
     private JPanel contentPanel = new JPanel();
 
     private TextArea info = new TextArea("information" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
-    private JDialog information = new JDialog(frame , "information" , false);
+    private JDialog information;
 
     private GridBagConstraints con = new GridBagConstraints();
     private GridBagLayout layout = new GridBagLayout();
-
-    private File batFile;
-    private String helpCmd = "!!!!";
 
     private JFileChooser listFile= new JFileChooser();
     private JFileChooser resultFile= new JFileChooser();
@@ -68,7 +66,7 @@ public class GeneSearch {
     private CmdHelper cmdHelper = new CmdHelper(info);
 
     private TextArea warningText = new TextArea("warning" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
-    private JDialog warning = new JDialog(frame , "warning" , true);
+    private JDialog warning;
 
     public static String[] stopCmd = {"/bin/sh" , "-c" ,
             "ps -ef |grep -e 'Gene_search.pl'|cut -c 9-15 |xargs kill -s 9"};
@@ -119,23 +117,6 @@ public class GeneSearch {
 
         contentPanel.setLayout(layout);
         contentPanel.setBackground(Color.white);
-//        titlePanel.setLayout(layout);
-//        titlePanel.setBackground(Color.white);
-//
-//
-//        addComp(con , 0 , 0  ,3 , 2 ,new Insets(10 , 10 , 10 , 10));
-//        layout.setConstraints(title , con);
-       // titlePanel.add(title);
-
-
-      //  frame.add(titlePanel , BorderLayout.NORTH);
-//        mainPanel.add(titlePanel , BorderLayout.NORTH);
-
-        //contentPanel
-
-//        addComp(con , 9 , 0 , 1 , 1 , new Insets(10 , 10, 10 , 10));
-//        layout.setConstraints(helpBtn , con);
-     //   contentPanel.add(helpBtn);
 
         con.anchor = GridBagConstraints.EAST;//all label align east
         con.fill = GridBagConstraints.NONE; //all label wont expand
@@ -219,11 +200,7 @@ public class GeneSearch {
         mainPanel.add(contentPanel , BorderLayout.CENTER);
         mainPanel.setBackground(Color.white);
         mainPanel.setSize(1500 , 1000);
-     //   mainPanel.setVisible(true);
 
-     //   frame.add(contentPanel , BorderLayout.CENTER);
-    //    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      //  frame.add(mainPanel);
         frame.getContentPane().setBackground(Color.white);
         frame.setSize(R.frame_width , R.frame_height);
 //        frame.setVisible(true);
@@ -262,78 +239,47 @@ public class GeneSearch {
             }
         });
 
-        submitBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(! information.isVisible() && checkData()){
-                    try {
-                        information.setVisible(true);
-                        cmdHelper.execCmd(commandBuilder());
-                        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-                else {
-                    if(! checkData()){
-                        warning.setTitle("warning");
-                        warning.setVisible(true);
-                    }
-                }
-
-            }
-        });
-
-        information.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                int confirm =  JOptionPane.showConfirmDialog(frame ,
-                        "do you really want to stop the process ?" , "warning" , JOptionPane.YES_NO_OPTION);
-                if(confirm == JOptionPane.YES_OPTION ){
-                    try {
-                        System.out.println(confirm);
-                        cmdHelper.stopCmd(stopCmd);
-                        information.dispose();
-                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//                        frame.dispose();
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-
-            }
-        });
-
-//        helpBtn.addActionListener(new ActionListener() {
+//        submitBtn.addActionListener(new ActionListener() {
 //            @Override
 //            public void actionPerformed(ActionEvent e) {
-//                try {
-//                    BufferedReader reader;
-//                    if(System.getProperty("os.name").toLowerCase().startsWith("lin")
-//                            || System.getProperty("os.name").toLowerCase().startsWith("ubu")){
-//                        reader = new BufferedReader(new InputStreamReader(
-//                                new FileInputStream("src/Resource/help.txt") , "GBK"
-//                        ));
-//                    }else {
-//                        reader = new BufferedReader(new InputStreamReader(
-//                                new FileInputStream("src/Resource/help.txt")
-//                        ));
+//                if(! information.isVisible() && checkData()){
+//                    try {
+//                        information.setVisible(true);
+//                        cmdHelper.execCmd(commandBuilder());
+//                        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+//                    } catch (IOException e1) {
+//                        e1.printStackTrace();
 //                    }
-//                    String temp = "";
-//                    warningText.setText("");
-//                    while ((temp = reader.readLine()) != null ){
-//                        warningText.append(temp + "\n");
-//                    }
-//                    reader.close();
-//                } catch (FileNotFoundException e1) {
-//                    e1.printStackTrace();
-//                } catch (IOException e1) {
-//                    e1.printStackTrace();
 //                }
-//                warning.setTitle("help text");
-//                warning.setVisible(true);
+//                else {
+//                    if(! checkData()){
+//                        warning.setTitle("warning");
+//                        warning.setVisible(true);
+//                    }
+//                }
+//
+//            }
+//        });
+//
+//        information.addWindowListener(new WindowAdapter() {
+//            @Override
+//            public void windowClosing(WindowEvent e) {
+//                int confirm =  JOptionPane.showConfirmDialog(frame ,
+//                        "do you really want to stop the process ?" , "warning" , JOptionPane.YES_NO_OPTION);
+//                if(confirm == JOptionPane.YES_OPTION ){
+//                    try {
+//                        System.out.println(confirm);
+//                        cmdHelper.stopCmd(stopCmd);
+//                        information.dispose();
+//                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+////                        frame.dispose();
+//                    } catch (InterruptedException e1) {
+//                        e1.printStackTrace();
+//                    } catch (IOException e1) {
+//                        e1.printStackTrace();
+//                    }
+//                }
+//
 //            }
 //        });
 

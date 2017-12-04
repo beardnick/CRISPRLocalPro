@@ -16,14 +16,18 @@ import java.util.regex.Pattern;
 /**
  * Created by asus on 2017/11/27.
  */
-public class ReferenceGenome{
+public class ReferenceGenome extends Window implements WindowCallBack{
 
 
-    public ReferenceGenome(JPanel panel , JFrame frame){
-        this.mainPanel = panel;
-        this.frame = frame;
-
+    public ReferenceGenome(JPanel panel , JFrame frame ){
+        super(frame , stopCmd);
+       this.mainPanel = panel;
+        setCallBack(this);
+//        this.frame = frame;
+//        information = new JDialog(frame , "information" , false);
+//        warning = new JDialog(frame , "warning" , true);
     }
+
 
     private JFrame frame ;
     private JPanel mainPanel;
@@ -52,7 +56,7 @@ public class ReferenceGenome{
     private MyJButton referBtn = new MyJButton();
     private MyJButton annoBtn = new MyJButton();
     private MyJButton outputBtn = new MyJButton();
-    private MyJButton submitBtn = new MyJButton();
+//    private MyJButton submitBtn = new MyJButton();
     private MyJButton helpBtn = new MyJButton();
 
 
@@ -70,20 +74,11 @@ public class ReferenceGenome{
     private JPanel titlePanel = new JPanel();
     private JPanel labelPanel = new JPanel();
 
-    private TextArea info = new TextArea("information" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
-    private TextArea warningText = new TextArea("warning" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
-
-    private JDialog information = new JDialog(frame , "information" , false);
-    private JDialog warning = new JDialog(frame , "warning" , true);
-
-
-    private String helpCmd = "!!!!!";//to make sure the same bat file will only be created once
     // TODO: 2017/12/4 change the stop cmd to Linux mode
     public  static String[] stopCmd = {"cmd.exe" , "/c" , "taskkill /f /im perl.exe"};
 //    public static String[] stopCmd = {"/bin/sh" , "-c" , "ps -ef |grep -e 'CRISPR_Local.pl' -e 'rs2_score_calculator.py' -e 'seqmap-1.0.12-linux-64' -e 'sgRNA_CFD.pl' -e 'cfd-score-calculator.py'|cut -c 9-15 |xargs kill -s 9"};
 
 
-    //   private CmdHelper cmdHelper = new CmdHelper(info);
 
 
 
@@ -112,20 +107,8 @@ public class ReferenceGenome{
         end3Text.setFont(R.textFont);
         nt.setFont(R.textFont);
         newNt.setFont(R.textFont);
-        info.setEditable(false);
-        info.setFont(R.infoFont);
-        info.setColumns(25);
-        information.add(info);
-        info.setBackground(Color.white);
-        information.setSize(1000 , 500);
-        information.setResizable(false);
-        information.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-        warningText.setFont(R.infoFont);
-        warning.add(warningText);
-        warning.setResizable(false);
-        warning.setSize(1000 , 500);
         Icon dirIcon = new ImageIcon("src/Resource/dir.png");
-        submitBtn.setIcon(new ImageIcon("src/Resource/submit.png"));
+//        submitBtn.setIcon(new ImageIcon("src/Resource/submit.png"));
         helpBtn.setIcon(new ImageIcon("src/Resource/help.png"));
         referBtn.setIcon(dirIcon);
         referBtn.setBackground(Color.white);
@@ -288,9 +271,6 @@ public class ReferenceGenome{
         layout.setConstraints(submitBtn , con);
         labelPanel.add(submitBtn);
 
-
-
-
         addComp(con , 0 , 3 , 3 , 10 , new Insets(10  , 10 ,10 , 10));
         con.fill = GridBagConstraints.VERTICAL;
         con.anchor = GridBagConstraints.WEST;
@@ -298,9 +278,7 @@ public class ReferenceGenome{
 //        frame.add(labelPanel , BorderLayout.CENTER);
         mainPanel.add(labelPanel , BorderLayout.CENTER);
       //  frame.add(mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setBackground(Color.white);
-        frame.setSize(R.frame_width , R.frame_height);
+
 //        frame.setVisible(true);
     }
 
@@ -339,7 +317,7 @@ public class ReferenceGenome{
         end5Text.setText("0");
     }
 
-    private CmdHelper cmdHelper = new CmdHelper(info);
+
 
     public void initEvent(){
         referBtn.addActionListener(new ActionListener() {
@@ -371,81 +349,6 @@ public class ReferenceGenome{
                 }
             }
         });
-
-        submitBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(! information.isVisible() && checkData()){
-                    try {
-                        information.setVisible(true);
-                        cmdHelper.execCmd(commandBuilder());
-                        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-                else {
-                    if(! checkData()){
-                        warning.setTitle("warning");
-                        warning.setVisible(true);
-                    }
-                }
-
-            }
-        });
-
-        information.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                int confirm =  JOptionPane.showConfirmDialog(frame ,
-                        "do you really want to stop the process ?" , "warning" , JOptionPane.YES_NO_OPTION);
-                if(confirm == JOptionPane.YES_OPTION ){
-                    try {
-                        System.out.println(confirm);
-                        cmdHelper.stopCmd(stopCmd);
-                        information.dispose();
-                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//                        frame.dispose();
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-
-            }
-        });
-
-//        helpBtn.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                try {
-//                    BufferedReader reader;
-//                    if(System.getProperty("os.name").toLowerCase().startsWith("lin")
-//                            || System.getProperty("os.name").toLowerCase().startsWith("ubu")){
-//                        reader = new BufferedReader(new InputStreamReader(
-//                                new FileInputStream("src/Resource/help.txt") , "GBK"
-//                        ));
-//                    }else {
-//                        reader = new BufferedReader(new InputStreamReader(
-//                                new FileInputStream("src/Resource/help.txt")
-//                        ));
-//                    }
-//                    String temp = "";
-//                    warningText.setText("");
-//                    while ((temp = reader.readLine()) != null ){
-//                        warningText.append(temp + "\n");
-//                    }
-//                    reader.close();
-//                } catch (FileNotFoundException e1) {
-//                    e1.printStackTrace();
-//                } catch (IOException e1) {
-//                    e1.printStackTrace();
-//                }
-//                warning.setTitle("help text");
-//                warning.setVisible(true);
-//            }
-//        });
 
     }
 
@@ -486,30 +389,9 @@ public class ReferenceGenome{
         return cmd.toString();
     }
 
-//    private boolean batBuilder(String cmd) throws IOException {
-//        boolean isTheSameCmd = false;
-//        if(! (isTheSameCmd = cmd.equals(helpCmd)) ){
-//            helpCmd = cmd;
-//            batFile = new File(labelText.getText() + ".bat");
-//            int i = 1;
-//            while (batFile.exists()){
-//                batFile = new File(labelText.getText() + "(" + String.valueOf(i) + ")" + ".bat");
-//                i ++;
-//            }
-//            System.out.println(batFile.getName());
-//            batFile.createNewFile();
-//            FileWriter writer = new FileWriter(batFile);
-//            writer.write(cmd);
-//            writer.close();
-//        }
-//
-//        return ! isTheSameCmd;
-//    }
 
 
-
-
-    private boolean checkData(){
+    public boolean checkData(){
         warningText.setText("");
         textFieldEmpty(referDir , Color.pink, "please choose a fasta file\n" );
         textFieldEmpty(annoDir , Color.pink , "please choose a gff3 file\n");
@@ -554,29 +436,6 @@ public class ReferenceGenome{
         return warningText.getText().length() == 0;
     }
 
-    private boolean textFieldEmpty(JTextField text , Color color , String notice  ){
-        boolean isEmpty;
-        if(text.getText().length() == 0){
-            isEmpty =true;
-            warningText.append(notice);
-            text.setOpaque(true);
-            text.setBackground(color);
-        }else {
-            isEmpty = false;
-            text.setOpaque(false);
-        }
-        return isEmpty;
-    }
-
-
-
-    private void addComp(GridBagConstraints constraints , int x , int y , int gridWidth , int gridHeight , Insets insets){
-        constraints.gridx = x;
-        constraints.gridy = y;
-        constraints.gridheight = gridHeight;
-        constraints.gridwidth = gridWidth;
-        constraints.insets = insets;
-    }
 
 }
 
