@@ -75,11 +75,12 @@ public class ReferenceGenome{
 
     private JDialog information = new JDialog(frame , "information" , false);
     private JDialog warning = new JDialog(frame , "warning" , true);
-    private File batFile;
+
 
     private String helpCmd = "!!!!!";//to make sure the same bat file will only be created once
-
-    public static String[] stopCmd = {"/bin/sh" , "-c" , "ps -ef |grep -e 'CRISPR_Local.pl' -e 'rs2_score_calculator.py' -e 'seqmap-1.0.12-linux-64' -e 'sgRNA_CFD.pl' -e 'cfd-score-calculator.py'|cut -c 9-15 |xargs kill -s 9"};
+    // TODO: 2017/12/4 change the stop cmd to Linux mode
+    public  static String[] stopCmd = {"cmd.exe" , "/c" , "taskkill /f /im perl.exe"};
+//    public static String[] stopCmd = {"/bin/sh" , "-c" , "ps -ef |grep -e 'CRISPR_Local.pl' -e 'rs2_score_calculator.py' -e 'seqmap-1.0.12-linux-64' -e 'sgRNA_CFD.pl' -e 'cfd-score-calculator.py'|cut -c 9-15 |xargs kill -s 9"};
 
 
     //   private CmdHelper cmdHelper = new CmdHelper(info);
@@ -255,7 +256,7 @@ public class ReferenceGenome{
 
         addComp(con , 0 , 3 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(option , con);
-        labelPanel.add(option);
+//        labelPanel.add(option);
 
         con.anchor = GridBagConstraints.EAST;
         addComp(con , 0 , 4 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
@@ -374,7 +375,7 @@ public class ReferenceGenome{
         submitBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(checkData()){
+                if(! information.isVisible() && checkData()){
                     try {
                         information.setVisible(true);
                         cmdHelper.execCmd(commandBuilder());
@@ -384,8 +385,10 @@ public class ReferenceGenome{
                     }
                 }
                 else {
-                    warning.setTitle("warning");
-                    warning.setVisible(true);
+                    if(! checkData()){
+                        warning.setTitle("warning");
+                        warning.setVisible(true);
+                    }
                 }
 
             }
@@ -401,7 +404,8 @@ public class ReferenceGenome{
                         System.out.println(confirm);
                         cmdHelper.stopCmd(stopCmd);
                         information.dispose();
-                        frame.dispose();
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//                        frame.dispose();
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     } catch (IOException e1) {
@@ -547,8 +551,7 @@ public class ReferenceGenome{
         System.out.println(warningText.getText().equals(""));
         System.out.println(warningText.getText().toString());
 
-        return warningText.getText().equals("");
-
+        return warningText.getText().length() == 0;
     }
 
     private boolean textFieldEmpty(JTextField text , Color color , String notice  ){

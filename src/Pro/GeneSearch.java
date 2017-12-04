@@ -27,21 +27,24 @@ public class GeneSearch {
     private JPanel mainPanel;
 
     private JLabel title = new JLabel("CRISPR-Local");
-    private JLabel viceTitle = new JLabel("Gene search");
+    private JLabel viceTitle = new JLabel("Database search");
 
     private JLabel listLabel = new JLabel("Gene List :");
-    private JLabel resultLabel = new JLabel("Result file :");
+    private JLabel resultLabel = new JLabel("Reference database :");
+    private JLabel userLabel = new JLabel("User's database :");
     private JLabel outputLabel = new JLabel("Output directory :");
     private JLabel numResultLabel = new JLabel("Number of result per gene :");
     private JLabel optionsLabel = new JLabel("Options :");
 
     private JTextField listText = new JTextField();
     private JTextField resultText = new JTextField();
+    private JTextField userText = new JTextField();
     private JTextField outputText = new JTextField();
     private JTextField numResultText = new JTextField();
 
     private MyJButton listBtn = new MyJButton();
     private MyJButton resultBtn = new MyJButton();
+    private MyJButton userBtn = new MyJButton();
     private MyJButton outputBtn = new MyJButton();
     private MyJButton submitBtn = new MyJButton();
     private MyJButton helpBtn = new MyJButton();
@@ -67,7 +70,8 @@ public class GeneSearch {
     private TextArea warningText = new TextArea("warning" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
     private JDialog warning = new JDialog(frame , "warning" , true);
 
-    public static String[] stopCmd = {"/bin/sh" , "-c" , "ps -ef |grep -e 'CRISPR_Local.pl' -e 'rs2_score_calculator.py' -e 'seqmap-1.0.12-linux-64' -e 'sgRNA_CFD.pl' -e 'cfd-score-calculator.py'|cut -c 9-15 |xargs kill -s 9"};
+    public static String[] stopCmd = {"/bin/sh" , "-c" ,
+            "ps -ef |grep -e 'Gene_search.pl'|cut -c 9-15 |xargs kill -s 9"};
 
 
 
@@ -76,13 +80,14 @@ public class GeneSearch {
         viceTitle.setFont(R.viceTitleFont);
         listLabel.setFont(R.textFont);
         resultLabel.setFont(R.textFont);
+        userLabel.setFont(R.textFont);
         outputLabel.setFont(R.textFont);
-        resultLabel.setFont(R.textFont);
         numResultLabel.setFont(R.textFont);
         optionsLabel.setFont(R.textFont);
 
         listText.setFont(R.textFont);
         resultText.setFont(R.textFont);
+        userText.setFont(R.textFont);
         outputText.setFont(R.textFont);
         numResultText.setFont(R.textFont);
 
@@ -91,6 +96,7 @@ public class GeneSearch {
         helpBtn.setIcon(new ImageIcon("src/Resource/help.png"));
         listBtn.setIcon(dirIcon);
         resultBtn.setIcon(dirIcon);
+        userBtn.setIcon(dirIcon);
         outputBtn.setIcon(dirIcon);
 
         warningText.setFont(R.infoFont);
@@ -144,7 +150,11 @@ public class GeneSearch {
 
         addComp(con , 0 , 3 , 2 , 1 , new Insets(30 , 10 , 30 , 10));
         layout.setConstraints( optionsLabel, con);
-        contentPanel.add(optionsLabel);
+      //  contentPanel.add(optionsLabel);
+
+        addComp(con , 0 , 3 , 2 , 1 , new Insets(30 , 10 , 30 , 10));
+        layout.setConstraints( userLabel, con);
+        contentPanel.add(userLabel , con);
 
         addComp(con , 0 , 4 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(outputLabel , con);
@@ -169,6 +179,10 @@ public class GeneSearch {
         layout.setConstraints(resultText , con);
         contentPanel.add(resultText);
 
+        addComp(con , 2 , 3 , 6 , 1 , new Insets(10, 10 , 10 , 10));
+        layout.setConstraints( userText, con);
+        contentPanel.add(userText , con);
+
         addComp(con , 2 , 4  , 6, 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(outputText , con);
         contentPanel.add(outputText);
@@ -189,6 +203,10 @@ public class GeneSearch {
         addComp(con , 8 , 2 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(resultBtn , con);
         contentPanel.add(resultBtn);
+
+        addComp(con , 8 , 3 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints( userBtn, con);
+        contentPanel.add(userBtn , con);
 
         addComp(con , 8 , 4 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(outputBtn , con);
@@ -247,7 +265,7 @@ public class GeneSearch {
         submitBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(checkData()){
+                if(! information.isVisible() && checkData()){
                     try {
                         information.setVisible(true);
                         cmdHelper.execCmd(commandBuilder());
@@ -257,8 +275,10 @@ public class GeneSearch {
                     }
                 }
                 else {
-                    warning.setTitle("warning");
-                    warning.setVisible(true);
+                    if(! checkData()){
+                        warning.setTitle("warning");
+                        warning.setVisible(true);
+                    }
                 }
 
             }
@@ -274,7 +294,8 @@ public class GeneSearch {
                         System.out.println(confirm);
                         cmdHelper.stopCmd(stopCmd);
                         information.dispose();
-                        frame.dispose();
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//                        frame.dispose();
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     } catch (IOException e1) {
@@ -346,10 +367,15 @@ public class GeneSearch {
     private String commandBuilder(){
         StringBuilder cmd = new StringBuilder("perl Gene_search.pl");
 
-        cmd.append(" -l " + listText.getText() );
-        cmd.append(" -i " + resultText.getText() );
-        cmd.append(" -o " + outputText.getText() );
-        cmd.append(" -N " + numResultText.getText() );
+        cmd.append("-l " + listText.getText());
+        cmd.append("-i " + resultText.getText());
+        if(userText.getText().length() > 0)
+            cmd.append("-u " + userText.getText());
+        if(outputText.getText().length() > 0)
+            cmd.append("-o " + outputText.getText());
+        if(numResultText.getText().length() > 0)
+            cmd.append("-N " + numResultText.getText());
+
 
         System.out.println(cmd.toString());
 
@@ -363,19 +389,17 @@ public class GeneSearch {
         warningText.setText("");
         textFieldEmpty(listText , Color.pink , "please choose the gene list file\n");
         textFieldEmpty(resultText , Color.pink , "please choose the result file\n");
-        textFieldEmpty(outputText , Color.pink , "please choose the output directory\n");
+//        textFieldEmpty(outputText , Color.pink , "please choose the output directory\n");
 
-        Pattern number = Pattern.compile("^[0-9]*$");
-        if(textFieldEmpty(numResultText , Color.pink , "please enter the number of the result\n" )){
-            System.out.println("resultNum :" + numResultText.getText());
-        }else  if(! number.matcher(numResultText.getText()).matches()){
-            warningText.append("please enter the number of the result\n");
-            numResultLabel.setForeground(Color.pink);
-        }else {
-            numResultLabel.setForeground(Color.black);
+       if(numResultText.getText().length() > 0){
+           Pattern number = Pattern.compile("^[0-9]*$");
+           if(! number.matcher(numResultText.getText()).matches()){
+               warningText.append("please enter the number of the result\n");
+               numResultLabel.setForeground(Color.pink);
+           }else {
+               numResultLabel.setForeground(Color.black);
+           }
         }
-
-
         System.out.println(warningText.getText().equals(""));
         System.out.println(warningText.getText().toString());
 
