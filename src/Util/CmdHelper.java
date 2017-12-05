@@ -17,10 +17,12 @@ public class CmdHelper {
     private JDialog information;
     private volatile boolean stop = false;
     private String cmdString = "";
+    private JFrame parent;
 
-    public CmdHelper(TextArea info , JDialog information) {
+    public CmdHelper(TextArea info , JDialog information , JFrame parent) {
         this.info = info;
         this.information = information;
+        this.parent = parent;
     }
     private volatile BufferedReader infoReader;
     private volatile BufferedReader errorReader;
@@ -90,6 +92,7 @@ public class CmdHelper {
                         info.append("INFO>    the window will close in 3 seconds later\n");
                         Thread.sleep(3000);
                         information.dispose();
+                        parent.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     }
                     System.out.println("wait for has been executed");
                 } catch (IOException e) {
