@@ -19,7 +19,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
 
 
     public ReferenceGenome(JPanel panel , JFrame frame ){
-        super(frame , stopCmd);
+        super(frame);
        this.mainPanel = panel;
         setCallBack(this);
     }
@@ -369,7 +369,15 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         return cmd.toString();
     }
 
-
+    public String[] stopCmdBuilder(){
+        //        ps -ef |grep -e '$label'|cut -c 9-15 |xargs kill -s 9
+        StringBuilder builder = new StringBuilder(" ps -ef |grep -e ");
+        builder.append("'" + labelText.getText() + "'");
+        builder.append("|cut -c 9-15 |xargs kill -s 9");
+        System.out.println("STOP CMD : " + builder.toString());
+        String[] stop = {"/bin/sh" , "-c" , builder.toString()};
+        return stop;
+    }
 
     public boolean checkData(){
         warningText.setText("");

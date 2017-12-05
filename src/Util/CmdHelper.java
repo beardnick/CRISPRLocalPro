@@ -38,7 +38,14 @@ public class CmdHelper {
             else {
                 stop = true;
                 result.destroy();
-                runtime.exec(cmd);
+                if(cmd.length == 3){
+                    runtime.exec(cmd);
+                }
+                else if(cmd.length > 3){
+                    for(int i = 0 ; i < cmd.length - 2 ; i ++){
+                        runtime.exec(new String[] {"/bin/sh" , "-c" , cmd[i]});
+                    }
+                }
                 System.out.println(stop);
                 System.out.println("ERROR : " + errorThread.isAlive());
                 System.out.println("INFO : " + infoThread.isAlive());
@@ -52,7 +59,6 @@ public class CmdHelper {
             }
         }
     }
-
     public void execCmd(String cmd) throws IOException {
         stop = false;
         info.setText("the process is running ...\n" +
@@ -146,5 +152,7 @@ public class CmdHelper {
 
         }
     }
+
+
 }
 

@@ -14,6 +14,7 @@ import java.io.IOException;
 interface WindowCallBack{
     public  boolean checkData();
     public  String commandBuilder();
+    public String[] stopCmdBuilder();
 }
 
 /**
@@ -21,7 +22,6 @@ interface WindowCallBack{
  */
 public class Window {
     private CmdHelper cmdHelper;
-    private String[] stopCmd;
     private WindowCallBack callBack;
 
     public JFrame frame;
@@ -32,9 +32,8 @@ public class Window {
     public JDialog information;
     public JDialog warning;
 
-    public Window(JFrame frame , String[] stopCmd ){
+    public Window(JFrame frame){
         this.frame = frame;
-        this.stopCmd = stopCmd;
         information = new JDialog(frame , "information" , false);
         warning = new JDialog(frame , "warning" , true);
         this.cmdHelper = new CmdHelper(info , information , frame);
@@ -60,7 +59,7 @@ public class Window {
         frame.getContentPane().setBackground(Color.white);
         frame.setSize(R.frame_width , R.frame_height);
     }
-    private void initWindowEvent(){
+    public void initWindowEvent(){
         submitBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -104,8 +103,7 @@ public class Window {
                         "do you really want to stop the process ?" , "warning" , JOptionPane.YES_NO_OPTION);
                 if(confirm == JOptionPane.YES_OPTION ){
                     try {
-                        System.out.println(confirm);
-                        cmdHelper.stopCmd(stopCmd);
+                        cmdHelper.stopCmd(callBack.stopCmdBuilder());
                         information.dispose();
                         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     } catch (InterruptedException e1) {
@@ -142,6 +140,14 @@ public class Window {
 
     public void setCallBack(WindowCallBack callBack){
         this.callBack = callBack;
+    }
+
+    public CmdHelper getCmdHelper() {
+        return cmdHelper;
+    }
+
+    public void setCmdHelper(CmdHelper cmdHelper) {
+        this.cmdHelper = cmdHelper;
     }
 
 }

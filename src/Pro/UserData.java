@@ -8,6 +8,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -16,7 +18,7 @@ import java.util.regex.Pattern;
 public class UserData extends Window implements WindowCallBack {
 
     public UserData(JPanel panel , JFrame frame){
-        super(frame , stopCmd);
+        super(frame);
         this.mainPanel = panel;
         setCallBack(this);
     }
@@ -52,6 +54,7 @@ public class UserData extends Window implements WindowCallBack {
 
     private StringBuilder dataString = new StringBuilder("");
 
+    private ArrayList<String> fileList = new ArrayList<String>();
     public static String[] stopCmd = {"/bin/sh" , "-c" ,
         "ps -ef |grep -e 'User_sgRNA.pl' -e 'rs2_score_calculator.py' -e 'samtools' |cut -c 9-15 |xargs kill -s 9"};
     public void initView(){
@@ -228,7 +231,6 @@ public class UserData extends Window implements WindowCallBack {
                                 f.getName().endsWith(".fq.gz") ||
                                 f.getName().endsWith(".fastq.gz");
             }
-
             @Override
             public String getDescription() {
                 return
@@ -246,7 +248,6 @@ public class UserData extends Window implements WindowCallBack {
         });
         outputFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         threadsText.setText("1");
-
 
     }
 
@@ -269,9 +270,12 @@ public class UserData extends Window implements WindowCallBack {
                     dataString.append(dataText.getText());
                     if(! dataString.toString().contains(dataFile.getSelectedFile().getPath())){
                         if(dataText.getText().length() != 0){
-                            dataString.append(";");
+                            dataString.append(",");
                         }
                         dataString.append(dataFile.getSelectedFile().getPath());
+                        String fileName=dataFile.getSelectedFile().getName();
+                        String name=fileName.substring(0 , fileName.indexOf("."));
+                        fileList.add(name);
                     }
                     dataText.setText(dataString.toString());
                     outputText.setEditable(false);
@@ -336,6 +340,19 @@ public class UserData extends Window implements WindowCallBack {
         }
         return warningText.getText().equals("");
 
+    }
+
+    public String[] stopCmdBuilder(){
+//        ps -ef |grep '关键字' |cut -c 9-15 |xargs kill -s 9
+        String[] stop = new String[fileList.size() + 2];
+        stop[0] = "/bin/sh";
+        stop[1] = "-c";
+        int i = 2;
+        for(String string : fileList){
+            stop[i ++] = "ps -ef |grep " + "'" + string +  "'" + "|cut -c 9-15 |xargs kill -s 9";
+            System.out.println("STOP CMD :" + stop[i - 1]);
+        }
+        return stop;
     }
 
 }
