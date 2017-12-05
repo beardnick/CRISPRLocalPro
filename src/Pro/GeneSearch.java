@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 public class GeneSearch extends Window implements WindowCallBack {
 
     public GeneSearch(JPanel panel , JFrame frame){
-        super(frame , stopCmd);
+        super(frame);
         this.mainPanel = panel;
         setCallBack(this);
     }
@@ -291,6 +291,11 @@ public class GeneSearch extends Window implements WindowCallBack {
         System.out.println(warningText.getText().toString());
 
         return warningText.getText().length() == 0;
+    }
+
+    public String[] stopCmdBuilder(){
+        System.out.println("STOP CMD : " + stopCmd);
+        return stopCmd;
     }
 
 }
