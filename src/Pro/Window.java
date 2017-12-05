@@ -37,7 +37,7 @@ public class Window {
         this.stopCmd = stopCmd;
         information = new JDialog(frame , "information" , false);
         warning = new JDialog(frame , "warning" , true);
-        this.cmdHelper = new CmdHelper(info , information);
+        this.cmdHelper = new CmdHelper(info , information , frame);
         initWindowView();
         initWindowEvent();
     }
@@ -56,7 +56,7 @@ public class Window {
         warning.setResizable(false);
         warning.setSize(1000 , 500);
         submitBtn.setIcon(new ImageIcon("src/Resource/submit.png"));
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.white);
         frame.setSize(R.frame_width , R.frame_height);
     }
@@ -67,6 +67,7 @@ public class Window {
                 if(! information.isVisible() && callBack.checkData()){
                     try {
                         information.setVisible(true);
+                        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                         cmdHelper.execCmd(callBack.commandBuilder());
                     } catch (IOException e1) {
                         e1.printStackTrace();
@@ -82,19 +83,19 @@ public class Window {
             }
         });
 
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-               if(warning.isVisible() || information.isVisible()){
-               }else {
-                   System.out.println("close option : " + frame.getDefaultCloseOperation());
-                   System.out.println(frame.getDefaultCloseOperation() == JFrame.DO_NOTHING_ON_CLOSE);
-                   System.out.println("warning : " + warning.isVisible());
-                   System.out.println("information : " + information.isVisible());
-                   frame.dispose();
-               }
-            }
-        });
+//        frame.addWindowListener(new WindowAdapter() {
+//            @Override
+//            public void windowClosing(WindowEvent e) {
+//               if(warning.isVisible() || information.isVisible()){
+//               }else {
+//                   System.out.println("close option : " + frame.getDefaultCloseOperation());
+//                   System.out.println(frame.getDefaultCloseOperation() == JFrame.DO_NOTHING_ON_CLOSE);
+//                   System.out.println("warning : " + warning.isVisible());
+//                   System.out.println("information : " + information.isVisible());
+//                   frame.dispose();
+//               }
+//            }
+//        });
 
         information.addWindowListener(new WindowAdapter() {
             @Override
@@ -106,13 +107,13 @@ public class Window {
                         System.out.println(confirm);
                         cmdHelper.stopCmd(stopCmd);
                         information.dispose();
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     } catch (InterruptedException e1) {
                         e1.printStackTrace();
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
                 }
-
             }
         });
     }
