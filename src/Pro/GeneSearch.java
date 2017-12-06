@@ -3,7 +3,6 @@ package Pro;
 import Util.MyJButton;
 
 import javax.swing.*;
-import javax.swing.filechooser.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -59,7 +58,7 @@ public class GeneSearch extends Window implements WindowCallBack {
 
 
     public static String[] stopCmd = {"/bin/sh" , "-c" ,
-            "ps -ef |grep -e 'Gene_search.pl'|cut -c 9-15 |xargs kill -s 9"};
+            "ps -ef |grep -e 'DB-build.pl'|cut -c 9-15 |xargs kill -s 9"};
 
 
 
@@ -252,7 +251,7 @@ public class GeneSearch extends Window implements WindowCallBack {
 
 
     public String commandBuilder(){
-        StringBuilder cmd = new StringBuilder("perl Gene_search.pl");
+        StringBuilder cmd = new StringBuilder("perl DB-build.pl");
 
         cmd.append(" -l " + listText.getText());
         cmd.append(" -i " + resultText.getText());
@@ -264,7 +263,7 @@ public class GeneSearch extends Window implements WindowCallBack {
             cmd.append(" -N " + numResultText.getText());
 
 
-        System.out.println(cmd.toString());
+//        System.out.println(cmd.toString());
 
         return cmd.toString();
     }
@@ -287,14 +286,14 @@ public class GeneSearch extends Window implements WindowCallBack {
                numResultLabel.setForeground(Color.black);
            }
         }
-        System.out.println(warningText.getText().equals(""));
-        System.out.println(warningText.getText().toString());
+//        System.out.println(warningText.getText().equals(""));
+//        System.out.println(warningText.getText().toString());
 
         return warningText.getText().length() == 0;
     }
 
     public String[] stopCmdBuilder(){
-        System.out.println("STOP CMD : " + stopCmd);
+//        System.out.println("STOP CMD : " + stopCmd);
         return stopCmd;
     }
 

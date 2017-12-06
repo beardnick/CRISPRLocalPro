@@ -82,20 +82,6 @@ public class Window {
             }
         });
 
-//        frame.addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//               if(warning.isVisible() || information.isVisible()){
-//               }else {
-//                   System.out.println("close option : " + frame.getDefaultCloseOperation());
-//                   System.out.println(frame.getDefaultCloseOperation() == JFrame.DO_NOTHING_ON_CLOSE);
-//                   System.out.println("warning : " + warning.isVisible());
-//                   System.out.println("information : " + information.isVisible());
-//                   frame.dispose();
-//               }
-//            }
-//        });
-
         information.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -140,14 +126,6 @@ public class Window {
 
     public void setCallBack(WindowCallBack callBack){
         this.callBack = callBack;
-    }
-
-    public CmdHelper getCmdHelper() {
-        return cmdHelper;
-    }
-
-    public void setCmdHelper(CmdHelper cmdHelper) {
-        this.cmdHelper = cmdHelper;
     }
 
 }

@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -56,7 +55,7 @@ public class UserData extends Window implements WindowCallBack {
 
     private ArrayList<String> fileList = new ArrayList<String>();
     public static String[] stopCmd = {"/bin/sh" , "-c" ,
-        "ps -ef |grep -e 'User_sgRNA.pl' -e 'rs2_score_calculator.py' -e 'samtools' |cut -c 9-15 |xargs kill -s 9"};
+        "ps -ef |grep -e 'UD-build.pl' -e 'rs2_score_calculator.py' -e 'samtools' |cut -c 9-15 |xargs kill -s 9"};
     public void initView(){
         title.setFont(R.titleFont);
         viceTitle.setFont(R.viceTitleFont);
@@ -305,7 +304,7 @@ public class UserData extends Window implements WindowCallBack {
     }
 
     public String commandBuilder(){
-        StringBuilder cmd = new StringBuilder("perl User_sgRNA.pl");
+        StringBuilder cmd = new StringBuilder("perl UD-build.pl");
 
         cmd.append(" -i " + dataText.getText());
 
@@ -317,7 +316,7 @@ public class UserData extends Window implements WindowCallBack {
 
         cmd.append(" -p " + threadsText.getText());
 
-        System.out.println(cmd.toString());
+//        System.out.println(cmd.toString());
         return cmd.toString();
     }
 
@@ -331,7 +330,7 @@ public class UserData extends Window implements WindowCallBack {
         textFieldEmpty(outputText , Color.pink , "please choose a output directory\n");
         Pattern number = Pattern.compile("^[0-9]*$");
         if(textFieldEmpty(threadsText , Color.pink , "please enter the number of the thread\n" )){
-            System.out.println("threadsNum :" + threadsText.getText());
+//            System.out.println("threadsNum :" + threadsText.getText());
         }else  if(! number.matcher(threadsText.getText()).matches()){
             warningText.append("please enter the number of the threads\n");
             threadsLable.setForeground(Color.pink);
@@ -350,7 +349,7 @@ public class UserData extends Window implements WindowCallBack {
         int i = 2;
         for(String string : fileList){
             stop[i ++] = "ps -ef |grep " + "'" + string +  "'" + "|cut -c 9-15 |xargs kill -s 9";
-            System.out.println("STOP CMD :" + stop[i - 1]);
+//            System.out.println("STOP CMD :" + stop[i - 1]);
         }
         return stop;
     }

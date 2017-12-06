@@ -7,9 +7,6 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.*;
 import java.util.regex.Pattern;
 
 /**
@@ -68,7 +65,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
 
 //    public  static String[] stopCmd = {"cmd.exe" , "/c" , "taskkill /f /im perl.exe"};
     public static String[] stopCmd = {"/bin/sh" , "-c" ,
-        "ps -ef |grep -e 'CRISPR_Local.pl' -e 'rs2_score_calculator.py' -e 'seqmap-1.0.12-linux-64' -e 'sgRNA_CFD.pl' -e 'cfd-score-calculator.py'|cut -c 9-15 |xargs kill -s 9"};
+        "ps -ef |grep -e 'RD-build.pl' -e 'rs2_score_calculator.py' -e 'seqmap-1.0.12-linux-64' -e 'sgRNA_CFD.pl' -e 'cfd-score-calculator.py'|cut -c 9-15 |xargs kill -s 9"};
 
 
 
@@ -333,7 +330,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
     }
 
     public String commandBuilder(){
-        StringBuilder cmd = new StringBuilder("perl CRISPR_Local.pl");
+        StringBuilder cmd = new StringBuilder("perl RD-build.pl");
 
         //-i Genome
 
@@ -364,7 +361,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         cmd.append(" -D " + end3Text.getText());
 
 
-        System.out.println(cmd.toString());
+//        System.out.println(cmd.toString());
 
         return cmd.toString();
     }
@@ -374,7 +371,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         StringBuilder builder = new StringBuilder(" ps -ef |grep -e ");
         builder.append("'" + labelText.getText() + "'");
         builder.append("|cut -c 9-15 |xargs kill -s 9");
-        System.out.println("STOP CMD : " + builder.toString());
+//        System.out.println("STOP CMD : " + builder.toString());
         String[] stop = {"/bin/sh" , "-c" , builder.toString()};
         return stop;
     }
@@ -385,7 +382,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         textFieldEmpty(annoDir , Color.pink , "please choose a gff3 file\n");
         Pattern number = Pattern.compile("^[0-9]*$");
         if(textFieldEmpty(threadsNum , Color.pink , "please enter the number of the thread\n" )){
-            System.out.println("threadsNum :" + threadsNum.getText());
+//            System.out.println("threadsNum :" + threadsNum.getText());
         }else  if(! number.matcher(threadsNum.getText()).matches()){
             warningText.append("please enter the number of the threads\n");
             threadsLable.setForeground(Color.pink);
@@ -394,7 +391,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         }
 
         if(textFieldEmpty(end3Text , Color.pink , "please enter a number between 0 and 15 in Expanding 3 ' -end\n")){
-            System.out.println("end3Text :" + end3Text.getText());
+//            System.out.println("end3Text :" + end3Text.getText());
         }else if(!  number.matcher(end3Text.getText()).matches()){
             warningText.append("please enter number to end3 text\n");
             end3Lable.setForeground(Color.pink);
@@ -407,7 +404,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         }
 
         if(textFieldEmpty(end5Text , Color.pink , "please enter a number between 0 and 15 in Expanding 5 ' -end\n" )){
-            System.out.println("end5Text :" + end5Text.getText());
+//            System.out.println("end5Text :" + end5Text.getText());
         }else if(! number.matcher(end5Text.getText()).matches()){
             warningText.append("please enter number to end5 text\n");
             end5Lable.setForeground(Color.pink);
@@ -418,8 +415,8 @@ public class ReferenceGenome extends Window implements WindowCallBack{
             end5Lable.setForeground(Color.black);
         }
 
-        System.out.println(warningText.getText().equals(""));
-        System.out.println(warningText.getText().toString());
+//        System.out.println(warningText.getText().equals(""));
+//        System.out.println(warningText.getText().toString());
 
         return warningText.getText().length() == 0;
     }

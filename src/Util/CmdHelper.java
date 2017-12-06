@@ -34,7 +34,9 @@ public class CmdHelper {
 
     public void stopCmd(String[] cmd) throws InterruptedException, IOException {
         if(! stop){
-            if(result == null)System.out.println("the result == null");
+            if(result == null){
+//                System.out.println("the result == null");
+            }
             else {
                 stop = true;
                 result.destroy();
@@ -46,29 +48,30 @@ public class CmdHelper {
                         runtime.exec(new String[] {"/bin/sh" , "-c" , cmd[i]});
                     }
                 }
-                System.out.println(stop);
-                System.out.println("ERROR : " + errorThread.isAlive());
-                System.out.println("INFO : " + infoThread.isAlive());
-                System.out.println("WAIT : " + waitThread.isAlive());
+//                System.out.println(stop);
+//                System.out.println("ERROR : " + errorThread.isAlive());
+//                System.out.println("INFO : " + infoThread.isAlive());
+//                System.out.println("WAIT : " + waitThread.isAlive());
                 info.append("INFO>    the process will stop soon \n INFO>    please wait\n");
                 infoReader.close();
                 errorReader.close();
-                System.out.println("ERROR : " + errorThread.isAlive());
-                System.out.println("INFO : " + infoThread.isAlive());
-                System.out.println("WAIT : " + waitThread.isAlive());
+//                System.out.println("ERROR : " + errorThread.isAlive());
+//                System.out.println("INFO : " + infoThread.isAlive());
+//                System.out.println("WAIT : " + waitThread.isAlive());
             }
         }
     }
     public void execCmd(String cmd) throws IOException {
         stop = false;
-        info.setText("the process is running ...\n" +
-                "please wait\n");
+       info.setText("########## Welcome to CRISPR-Local ##########\n" +
+               "CRISPR-Local is a Local and high-throughput sgRNA design tool for plant genome editing using CRISPR-Cas9, It supports the design of sgRNA for user’s sequence data.\n" +
+               "The process is running, do not close this window...\n");
         infoThread = new Thread(new InfoThread());
         errorThread = new Thread(new ErrorThread());
         waitThread = new Thread(new WaitThread());
-        System.out.println("ERROR : " + errorThread.isAlive());
-        System.out.println("INFO : " + infoThread.isAlive());
-        System.out.println("WAIT : " + waitThread.isAlive());
+//        System.out.println("ERROR : " + errorThread.isAlive());
+//        System.out.println("INFO : " + infoThread.isAlive());
+//        System.out.println("WAIT : " + waitThread.isAlive());
         cmdString = cmd;
         waitThread.start();
     }
@@ -91,7 +94,7 @@ public class CmdHelper {
                     errorThread.start();
                     infoThread.start();
                     result.waitFor();
-                    System.out.println("PROCESS EXIT VALUE : " + result.exitValue());
+//                    System.out.println("PROCESS EXIT VALUE : " + result.exitValue());
                     if(result.exitValue() == 0){
                         Thread.sleep(2000);
                         info.append("INFO>    the process is over\n");
@@ -100,7 +103,7 @@ public class CmdHelper {
                         information.dispose();
                         parent.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     }
-                    System.out.println("wait for has been executed");
+//                    System.out.println("wait for has been executed");
                 } catch (IOException e) {
                     e.printStackTrace();
                     info.append("ERROR>    " + e.getMessage());
@@ -119,7 +122,7 @@ public class CmdHelper {
                 while (! stop){
                     if ((temp = infoReader.readLine()) != null) {
                         if (temp.length() != 0) {
-                            System.out.println("INFO>    " + temp);
+//                            System.out.println("INFO>    " + temp);
                             info.append("INFO>    " + temp + "\n");
                         }
 
@@ -141,7 +144,7 @@ public class CmdHelper {
                 while (! stop){
                     if ((temp = errorReader.readLine()) != null) {
                         if (temp.length() != 0) {
-                            System.out.println("ERROR>    " + temp);
+//                            System.out.println("ERROR>    " + temp);
                             info.append("ERROR>    " + temp + "\n");
                         }
                     }
