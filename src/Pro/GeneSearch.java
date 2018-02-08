@@ -58,7 +58,7 @@ public class GeneSearch extends Window implements WindowCallBack {
 
 
     public static String[] stopCmd = {"/bin/sh" , "-c" ,
-            "ps -ef |grep -e 'DB-build.pl'|cut -c 9-15 |xargs kill -s 9"};
+            "ps -ef |grep -e 'DB-search.pl'|cut -c 9-15 |xargs kill -s 9"};
 
 
 
@@ -251,7 +251,7 @@ public class GeneSearch extends Window implements WindowCallBack {
 
 
     public String commandBuilder(){
-        StringBuilder cmd = new StringBuilder("perl DB-build.pl");
+        StringBuilder cmd = new StringBuilder("perl DB-search.pl");
 
         cmd.append(" -l " + listText.getText());
         cmd.append(" -i " + resultText.getText());
