@@ -1,12 +1,17 @@
 package Pro;
 
+
 import Util.MyJButton;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Created by asus on 2017/11/27.
@@ -15,19 +20,22 @@ public class Pro{
 
     private JFrame frame = new JFrame();
 
+    private JPanel topPanel = new JPanel();
+    private JPanel leftPanel = new JPanel();
+    private JPanel referencePanel = new JPanel();
+    private JPanel userDataPanel = new JPanel();
+    private JPanel geneSearchPanel = new JPanel();
+    private JPanel plSearchPanel = new JPanel();
 
     private MyJButton referenceBtn = new MyJButton();
     private MyJButton userDataBtn = new MyJButton();
     private MyJButton geneSearchBtn = new MyJButton();
-
-    private JPanel topPanel = new JPanel();
-    private JPanel referencePanel = new JPanel();
-    private JPanel userDataPanel = new JPanel();
-    private JPanel geneSearchPanel = new JPanel();
+    private JLabel maizegoLabel = new JLabel();
 
     private ReferenceGenome referenceGenome;
     private UserData userData;
     private GeneSearch geneSearch;
+    private PlSearch plSearch;
 
     private GridBagConstraints constraints = new GridBagConstraints();
     private GridBagLayout layout = new GridBagLayout();
@@ -35,6 +43,7 @@ public class Pro{
     private JPanel mainPanel;
 
     private JLabel title = new JLabel("CRISPR-Local");
+    private JLabel viceTitle = new JLabel("A local tool for high-throughput CRISPR single-guide RNA (sgRNA) design in plants.");
     private MyJButton helpBtn = new MyJButton();
     private TextArea helpText = new TextArea("help text" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
     private JDialog help = new JDialog(frame , "help text" , true);
@@ -46,6 +55,8 @@ public class Pro{
         userDataBtn.setIcon(new ImageIcon("src/Resource/U.png"));
         geneSearchBtn.setIcon(new ImageIcon("src/Resource/D.png"));
         helpBtn.setIcon(new ImageIcon("src/Resource/help.png"));
+        maizegoLabel.setIcon(new ImageIcon("src/Resource/MaizeGo_logo.png"));
+
 
         title.setFont(R.titleFont);
 
@@ -65,28 +76,59 @@ public class Pro{
         referencePanel.setVisible(true);
         topPanel.setLayout(layout);
 
+//        constraints.anchor = GridBagConstraints.WEST;
         addComp(constraints , 0 , 0 , 1, 1 , new Insets(10 , 10 , 10 , 100) );
         layout.setConstraints(title  , constraints);
         topPanel.add(title);
 
-        addComp(constraints , 1, 0 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(referenceBtn , constraints);
-        topPanel.add(referenceBtn);
 
-        addComp(constraints , 2 , 0 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(userDataBtn , constraints);
-        topPanel.add(userDataBtn);
-
-        addComp(constraints , 3 , 0 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(geneSearchBtn , constraints);
-        topPanel.add(geneSearchBtn);
-
-        addComp(constraints , 4 , 0 , 1 , 1 , new Insets(10 , 100 , 10 , 10));
+        addComp(constraints , 2 , 0 , 1 , 1 , new Insets(10 , 100 , 10 , 10));
         layout.setConstraints(helpBtn , constraints);
         topPanel.add(helpBtn);
 
+        addComp(constraints , 0 , 1 , 4 , 1, new Insets(10 , 10 , 10 , 10));
+                layout.setConstraints( viceTitle, constraints);
+                topPanel.add(viceTitle);
+
         topPanel.setBackground(Color.white);
         frame.add(topPanel , BorderLayout.NORTH);
+
+//        addComp(constraints , 1, 0 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
+//        layout.setConstraints(referenceBtn , constraints);
+//        topPanel.add(referenceBtn);
+//
+//        addComp(constraints , 2 , 0 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
+//        layout.setConstraints(userDataBtn , constraints);
+//        topPanel.add(userDataBtn);
+//
+//        addComp(constraints , 3 , 0 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
+//        layout.setConstraints(geneSearchBtn , constraints);
+//        topPanel.add(geneSearchBtn);
+
+        constraints.fill = GridBagConstraints.NONE;
+
+        //setLayout后才会生效
+        leftPanel.setLayout(layout);
+//        leftPanel.setBackground(Color.white);
+
+        addComp(constraints , 0 , 0 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(referenceBtn , constraints);
+        leftPanel.add(referenceBtn);
+
+        addComp(constraints , 0 , 1 , 1 ,1 , new Insets(10 , 10 , 10 , 10));
+                layout.setConstraints( userDataBtn, constraints);
+                leftPanel.add(userDataBtn);
+
+        addComp(constraints , 0 , 2 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(geneSearchBtn , constraints);
+        leftPanel.add(geneSearchBtn);
+
+        addComp(constraints ,  0,  3, 1 ,1 , new Insets(200 , 10 , 10 , 10));
+                layout.setConstraints(maizegoLabel, constraints);
+                leftPanel.add(maizegoLabel);
+
+
+        frame.add(leftPanel , BorderLayout.WEST);
 
         mainPanel = referencePanel;
 
@@ -102,6 +144,16 @@ public class Pro{
     }
 
     public void initEvent(){
+        maizegoLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI("http://www.maizego.org/"));
+                } catch (IOException | URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
         referenceGenome.initEvent();
         geneSearch.initEvent();
         userData.initEvent();
