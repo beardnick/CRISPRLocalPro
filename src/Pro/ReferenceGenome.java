@@ -61,7 +61,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
 
 
     private JPanel titlePanel = new JPanel();
-    private JPanel labelPanel = new JPanel();
+    private JPanel contentPanel = new JPanel();
 
 //    public  static String[] stopCmd = {"cmd.exe" , "/c" , "taskkill /f /im perl.exe"};
     public static String[] stopCmd = {"/bin/sh" , "-c" ,
@@ -105,8 +105,8 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         con.fill = GridBagConstraints.BOTH;
         con.weightx = 1;
 
-        labelPanel.setLayout(layout);
-        labelPanel.setBackground(Color.white);
+        contentPanel.setLayout(layout);
+        contentPanel.setBackground(Color.white);
         titlePanel.setLayout(layout);
         titlePanel.setBackground(Color.white);
 
@@ -118,9 +118,9 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         con.anchor = GridBagConstraints.WEST;
         addComp(con , 3 , 0 , 1 , 1, new Insets(10 , 10 , 10 ,10));
         layout.setConstraints(viceTitle , con);
-        labelPanel.add(viceTitle);
+//        contentPanel.add(viceTitle);
 
-        mainPanel.add(titlePanel , BorderLayout.NORTH);
+//        mainPanel.add(titlePanel , BorderLayout.NORTH);
 
 
 
@@ -129,7 +129,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         addComp(con , 3 , 1 , 7 , 1 , new Insets(10 , 10 , 10 , 10));
         con.anchor = GridBagConstraints.WEST;
         layout.setConstraints(referDir , con);
-        labelPanel.add(referDir);
+        contentPanel.add(referDir);
 
 
 
@@ -137,7 +137,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         con.weightx = 1;
         addComp(con , 10 , 1 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(referBtn , con);
-        labelPanel.add(referBtn);
+        contentPanel.add(referBtn);
 
 
         addComp(con , 3 , 2 , 7 , 1 , new Insets(10 , 10 , 10 , 10));
@@ -145,77 +145,77 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         con.fill = GridBagConstraints.HORIZONTAL;
         con.weightx = 3;
         layout.setConstraints(annoDir , con);
-        labelPanel.add(annoDir);
+        contentPanel.add(annoDir);
 
         addComp(con , 10 , 2 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         con.fill = GridBagConstraints.HORIZONTAL;
         con.weightx = 1;
         layout.setConstraints(annoBtn , con);
-        labelPanel.add(annoBtn);
+        contentPanel.add(annoBtn);
 
         addComp(con , 3 , 4 , 7 , 1 , new Insets(10 , 10 , 10 , 10));
         con.anchor = GridBagConstraints.WEST;
         con.fill = GridBagConstraints.HORIZONTAL;
         con.weightx = 3;
         layout.setConstraints(outDir , con);
-        labelPanel.add(outDir);
+        contentPanel.add(outDir);
 
         addComp(con , 10 , 4 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         con.anchor = GridBagConstraints.EAST;
         con.fill = GridBagConstraints.HORIZONTAL;
         con.weightx = 1;
         layout.setConstraints(outputBtn , con);
-        labelPanel.add(outputBtn);
+        contentPanel.add(outputBtn);
 
         addComp(con , 3 , 5 , 7 , 1 , new Insets(10 , 10 , 10 , 10));
         con.anchor = GridBagConstraints.WEST;
         con.fill = GridBagConstraints.HORIZONTAL;
         con.weightx = 1;
         layout.setConstraints(threadsNum , con);
-        labelPanel.add(threadsNum);
+        contentPanel.add(threadsNum);
 
         addComp(con , 3 , 6 , 7 , 1 , new Insets(10 , 10 , 10 , 10));
         con.anchor = GridBagConstraints.EAST;
         con.fill = GridBagConstraints.HORIZONTAL;
         con.weightx = 1;
         layout.setConstraints(labelText , con);
-        labelPanel.add(labelText);
+        contentPanel.add(labelText);
 
         addComp(con , 3 , 7 , 7 , 1 , new Insets(10 , 10 , 10 , 10));
         con.anchor = GridBagConstraints.WEST;
         con.fill = GridBagConstraints.HORIZONTAL;
         con.weightx = 1;
         layout.setConstraints(end5Text , con);
-        labelPanel.add(end5Text);
+        contentPanel.add(end5Text);
 
         addComp(con , 10 , 8 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(newNt , con);
-        labelPanel.add(newNt);
+        contentPanel.add(newNt);
 
         addComp(con , 3 , 8 , 7 , 1 , new Insets(10 , 10 , 10 , 10));
         con.anchor = GridBagConstraints.EAST;
         con.fill = GridBagConstraints.HORIZONTAL;
         con.weightx = 1;
         layout.setConstraints(end3Text , con);
-        labelPanel.add(end3Text);
+        contentPanel.add(end3Text);
 
 
         addComp(con , 10 , 7 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(nt , con);
-        labelPanel.add(nt);
+        contentPanel.add(nt);
 
         con.fill = GridBagConstraints.NONE;
         con.weightx = 1;//all label wont expand
-        //labelPanel
+        //contentPanel
         con.anchor = GridBagConstraints.EAST;
         addComp(con , 0 , 1 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(referLable , con);
-        labelPanel.add(referLable);
+        contentPanel.add(referLable);
 
 
         addComp(con , 0 , 2 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(annoLable , con);
-        labelPanel.add(annoLable);
+        contentPanel.add(annoLable);
 
 
         addComp(con , 0 , 3 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
@@ -224,38 +224,38 @@ public class ReferenceGenome extends Window implements WindowCallBack{
         con.anchor = GridBagConstraints.EAST;
         addComp(con , 0 , 4 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(outputLable , con);
-        labelPanel.add(outputLable);
+        contentPanel.add(outputLable);
 
 
         addComp(con , 0 , 5 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(threadsLable , con);
-        labelPanel.add(threadsLable);
+        contentPanel.add(threadsLable);
 
 
         addComp(con , 0 , 6 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(labelLable , con);
-        labelPanel.add(labelLable);
+        contentPanel.add(labelLable);
 
 
         addComp(con , 0 , 7 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(end5Lable , con);
-        labelPanel.add(end5Lable);
+        contentPanel.add(end5Lable);
 
 
         addComp(con , 0 , 8 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(end3Lable , con);
-        labelPanel.add(end3Lable);
+        contentPanel.add(end3Lable);
 
-        addComp(con , 11 , 9 , 2 , 1 , new Insets(10 , 10 , 100 , 50));
+        addComp(con , 11 , 9 , 2 , 1 , new Insets(10 , 10 , 10 , 50));
         //  con.fill = GridBagConstraints.HORIZONTAL;
-        layout.setConstraints(submitBtn , con);
-        labelPanel.add(submitBtn);
+//        layout.setConstraints(submitBtn , con);
+//        contentPanel.add(submitBtn);
 
         addComp(con , 0 , 3 , 3 , 10 , new Insets(10  , 10 ,10 , 10));
         con.fill = GridBagConstraints.VERTICAL;
         con.anchor = GridBagConstraints.WEST;
-        layout.setConstraints(labelPanel , con);
-        mainPanel.add(labelPanel , BorderLayout.CENTER);
+        layout.setConstraints(contentPanel, con);
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
 
     }
 

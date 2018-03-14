@@ -97,7 +97,7 @@ public class UserData extends Window implements WindowCallBack {
         con.anchor = GridBagConstraints.WEST;
         addComp(con , 2 , 0 , 1 , 1, new Insets(10 , 10 , 10 ,10));
         layout.setConstraints(viceTitle , con);
-        contentPanel.add(viceTitle);
+//        contentPanel.add(viceTitle);
 
 
         //contentPanel
@@ -147,8 +147,8 @@ public class UserData extends Window implements WindowCallBack {
         contentPanel.add(outputBtn);
 
         addComp(con , 9 , 5 , 1 , 1 , new Insets(50 , 10 , 10 , 10));
-        layout.setConstraints(submitBtn , con);
-        contentPanel.add(submitBtn);
+//        layout.setConstraints(submitBtn , con);
+//        contentPanel.add(submitBtn);
 
 
         con.fill = GridBagConstraints.HORIZONTAL;
@@ -181,7 +181,7 @@ public class UserData extends Window implements WindowCallBack {
         con.fill = GridBagConstraints.HORIZONTAL;
         addComp(con , 0 , 0 , 3 , 3 , new Insets(10 , 10 , 10 ,10));
         layout.setConstraints(titlePanel , con);
-        mainPanel.add(titlePanel , BorderLayout.NORTH);
+//        mainPanel.add(titlePanel , BorderLayout.NORTH);
 //        frame.add(titlePanel , BorderLayout.NORTH);
 
         addComp(con , 0 , 3 , 3, 10 , new Insets(10  , 10 ,10 , 10));

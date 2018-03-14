@@ -12,25 +12,32 @@ import java.awt.event.MouseEvent;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 /**
  * Created by asus on 2017/11/27.
  */
 public class Pro{
 
+    private int currentWindow = 0;
+
     private JFrame frame = new JFrame();
 
     private JPanel topPanel = new JPanel();
     private JPanel leftPanel = new JPanel();
-    private JPanel referencePanel = new JPanel();
-    private JPanel userDataPanel = new JPanel();
-    private JPanel geneSearchPanel = new JPanel();
+    private JPanel rdPanel = new JPanel();
+    private JPanel udPanel = new JPanel();
+    private JPanel dbSearchPanel = new JPanel();
     private JPanel plSearchPanel = new JPanel();
+    private JPanel bottomPanel = new JPanel();
 
-    private MyJButton referenceBtn = new MyJButton();
-    private MyJButton userDataBtn = new MyJButton();
-    private MyJButton geneSearchBtn = new MyJButton();
+    private MyJButton rdBtn = new MyJButton();
+    private MyJButton udBtn = new MyJButton();
+    private MyJButton dbSearchBtn = new MyJButton();
+    private MyJButton plSearchBtn = new MyJButton();
+    private MyJButton submitBtn = new MyJButton();
     private JLabel maizegoLabel = new JLabel();
+    private JLabel crisprLabel = new JLabel();
 
     private ReferenceGenome referenceGenome;
     private UserData userData;
@@ -51,29 +58,37 @@ public class Pro{
 
     public void initView(){
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        referenceBtn.setIcon(new ImageIcon("src/Resource/R.png"));
-        userDataBtn.setIcon(new ImageIcon("src/Resource/U.png"));
-        geneSearchBtn.setIcon(new ImageIcon("src/Resource/D.png"));
+        rdBtn.setIcon(new ImageIcon("src/Resource/R.png"));
+        udBtn.setIcon(new ImageIcon("src/Resource/U.png"));
+        dbSearchBtn.setIcon(new ImageIcon("src/Resource/D.png"));
+        plSearchBtn.setIcon(new ImageIcon("src/Resource/P.png"));
         helpBtn.setIcon(new ImageIcon("src/Resource/help.png"));
-        maizegoLabel.setIcon(new ImageIcon("src/Resource/MaizeGo_logo.png"));
+        submitBtn.setIcon(new ImageIcon("src/Resource/submit.png"));
+        maizegoLabel.setIcon(new ImageIcon("src/Resource/maizego_logo.png"));
+        crisprLabel.setIcon(new ImageIcon("src/Resource/CRISPR-P.png"));
 
 
         title.setFont(R.titleFont);
+        title.setFont(R.titleFont);
+        viceTitle.setFont(R.viceTitleFont);
 
         helpText.setFont(R.infoFont);
         help.add(helpText);
         help.setResizable(false);
         help.setSize(1000 , 500);
 
-        referenceGenome = new ReferenceGenome(referencePanel, frame);
-        userData = new UserData(userDataPanel , frame);
-        geneSearch = new GeneSearch(geneSearchPanel , frame);
+        referenceGenome = new ReferenceGenome(rdPanel, frame);
+        userData = new UserData(udPanel, frame);
+        geneSearch = new GeneSearch(dbSearchPanel, frame);
+        plSearch = new PlSearch(plSearchPanel , frame);
         referenceGenome.initView();
         userData.initView();
         geneSearch.initView();
-        userDataPanel.setVisible(false);
-        geneSearchPanel.setVisible(false);
-        referencePanel.setVisible(true);
+        plSearch.initView();
+        plSearchPanel.setVisible(false);
+        udPanel.setVisible(false);
+        dbSearchPanel.setVisible(false);
+        rdPanel.setVisible(true);
         topPanel.setLayout(layout);
 
 //        constraints.anchor = GridBagConstraints.WEST;
@@ -82,7 +97,7 @@ public class Pro{
         topPanel.add(title);
 
 
-        addComp(constraints , 2 , 0 , 1 , 1 , new Insets(10 , 100 , 10 , 10));
+        addComp(constraints , 5, 0 , 1 , 1 , new Insets(10 , 100 , 10 , 10));
         layout.setConstraints(helpBtn , constraints);
         topPanel.add(helpBtn);
 
@@ -93,45 +108,63 @@ public class Pro{
         topPanel.setBackground(Color.white);
         frame.add(topPanel , BorderLayout.NORTH);
 
-//        addComp(constraints , 1, 0 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-//        layout.setConstraints(referenceBtn , constraints);
-//        topPanel.add(referenceBtn);
-//
-//        addComp(constraints , 2 , 0 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-//        layout.setConstraints(userDataBtn , constraints);
-//        topPanel.add(userDataBtn);
-//
-//        addComp(constraints , 3 , 0 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-//        layout.setConstraints(geneSearchBtn , constraints);
-//        topPanel.add(geneSearchBtn);
-
         constraints.fill = GridBagConstraints.NONE;
 
         //setLayout后才会生效
         leftPanel.setLayout(layout);
-//        leftPanel.setBackground(Color.white);
+        leftPanel.setBackground(Color.white);
 
         addComp(constraints , 0 , 0 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(referenceBtn , constraints);
-        leftPanel.add(referenceBtn);
+        layout.setConstraints(rdBtn, constraints);
+        leftPanel.add(rdBtn);
 
         addComp(constraints , 0 , 1 , 1 ,1 , new Insets(10 , 10 , 10 , 10));
-                layout.setConstraints( userDataBtn, constraints);
-                leftPanel.add(userDataBtn);
+                layout.setConstraints(udBtn, constraints);
+                leftPanel.add(udBtn);
 
         addComp(constraints , 0 , 2 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(geneSearchBtn , constraints);
-        leftPanel.add(geneSearchBtn);
+        layout.setConstraints(dbSearchBtn, constraints);
+        leftPanel.add(dbSearchBtn);
 
-        addComp(constraints ,  0,  3, 1 ,1 , new Insets(200 , 10 , 10 , 10));
-                layout.setConstraints(maizegoLabel, constraints);
-                leftPanel.add(maizegoLabel);
+        addComp(constraints ,  0, 3  , 1 ,1 , new Insets(10 , 10 , 10 , 10));
+                layout.setConstraints( plSearchBtn, constraints);
+                leftPanel.add(plSearchBtn);
+
+//        addComp(constraints ,  0,  4, 1 ,1 , new Insets(200 , 10 , 10 , 10));
+//                layout.setConstraints(maizegoLabel, constraints);
+//                leftPanel.add(maizegoLabel);
 
 
         frame.add(leftPanel , BorderLayout.WEST);
 
-        mainPanel = referencePanel;
+        bottomPanel.setBackground(Color.white);
+        bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
 
+        bottomPanel.add(Box.createHorizontalStrut(50));
+        bottomPanel.add(crisprLabel);
+        bottomPanel.add(Box.createHorizontalStrut(10));
+        bottomPanel.add(maizegoLabel);
+        bottomPanel.add(Box.createHorizontalGlue());
+        bottomPanel.add(submitBtn);
+        bottomPanel.add(Box.createHorizontalStrut(50));
+
+        frame.add(bottomPanel , BorderLayout.SOUTH);
+
+//        addComp(constraints , 0, 0 ,  1, 1, new Insets(10 , 10 , 10 , 10));
+//                layout.setConstraints( crisprLabel, constraints);
+//                bottomPanel.add(crisprLabel);
+//
+//        addComp(constraints ,1  , 0 ,  1, 1, new Insets(10 , 10 , 10 , 10));
+//                layout.setConstraints( maizegoLabel, constraints);
+//                bottomPanel.add(maizegoLabel);
+//
+//                addComp(constraints , 2 , 0 ,  1, 1, new Insets(10 , 500 , 10 , 10));
+//                        layout.setConstraints(submitBtn , constraints);
+//                        bottomPanel.add(submitBtn);
+//
+//        frame.add(bottomPanel , BorderLayout.SOUTH);
+
+        mainPanel = rdPanel;
         frame.add(mainPanel , BorderLayout.CENTER);
         frame.setVisible(true);
 
@@ -141,6 +174,7 @@ public class Pro{
         referenceGenome.initData();
         geneSearch.initData();
         userData.initData();
+        plSearch.initEvent();
     }
 
     public void initEvent(){
@@ -154,60 +188,59 @@ public class Pro{
                 }
             }
         });
+        crisprLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI("http://crispr.hzau.edu.cn/CRISPR2/"));
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                } catch (URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
         referenceGenome.initEvent();
         geneSearch.initEvent();
         userData.initEvent();
+        plSearch.initEvent();
 
-        referenceBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        ArrayList<MyJButton> btns = new ArrayList<>();
+        ArrayList<JPanel> jPanels = new ArrayList<>();
+        ArrayList<Window> windows = new ArrayList<>();
+        btns.add(rdBtn);
+        btns.add(udBtn);
+        btns.add(dbSearchBtn);
+        btns.add(plSearchBtn);
 
-                frame.add(topPanel , BorderLayout.NORTH);
+        jPanels.add(rdPanel);
+        jPanels.add(udPanel);
+        jPanels.add(dbSearchPanel);
+        jPanels.add(plSearchPanel);
 
-                mainPanel = referencePanel;
-                referencePanel.setVisible(true);
-                geneSearchPanel.setVisible(false);
-                userDataPanel.setVisible(false);
+        windows.add(referenceGenome);
+        windows.add(userData);
+        windows.add(geneSearch);
+        windows.add(plSearch);
 
-                frame.add(mainPanel , BorderLayout.CENTER);
-//                mainPanel = referencePanel;
-                referencePanel.setVisible(true);
-            }
-        });
-
-        userDataBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                frame.add(topPanel , BorderLayout.NORTH);
-
-                mainPanel = userDataPanel;
-                userDataPanel.setVisible(true);
-                referencePanel.setVisible(false);
-                geneSearchPanel.setVisible(false);
-
-                frame.add(mainPanel , BorderLayout.CENTER);
-//                mainPanel = userDataPanel;
-                userDataPanel.setVisible(true);
-            }
-        });
-
-        geneSearchBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                frame.add(topPanel , BorderLayout.NORTH);
-
-                mainPanel = geneSearchPanel;
-                geneSearchPanel.setVisible(true);
-                referencePanel.setVisible(false);
-                userDataPanel.setVisible(false);
-
-                frame.add(mainPanel , BorderLayout.CENTER);
-//                mainPanel = geneSearchPanel;
-
-            }
-        });
+        for (int i = 0; i < btns.size(); i++) {
+            int finalI = i;
+            btns.get(i).addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    frame.add(topPanel , BorderLayout.NORTH);
+                    mainPanel = jPanels.get(finalI);
+                    jPanels.get(finalI).setVisible(true);
+                    currentWindow = finalI;
+                    frame.add(mainPanel , BorderLayout.CENTER);
+                    for(int j = 0 ; j < jPanels.size() ; j ++){
+                        if(j != finalI){
+                            jPanels.get(j).setVisible(false);
+                        }
+                    }
+                }
+            });
+        }
 
         helpBtn.addActionListener(new ActionListener() {
             @Override
@@ -237,6 +270,13 @@ public class Pro{
                 }
                 help.setTitle("help text");
                 help.setVisible(true);
+            }
+        });
+
+        submitBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                windows.get(currentWindow).onSubmit();
             }
         });
     }

@@ -25,7 +25,7 @@ public class Window {
     private WindowCallBack callBack;
 
     public JFrame frame;
-    public MyJButton submitBtn = new MyJButton();
+//    public MyJButton submitBtn = new MyJButton();
     public TextArea info = new TextArea("information" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
     public TextArea warningText = new TextArea("warning" , 10 , 25 , TextArea.SCROLLBARS_VERTICAL_ONLY);
 
@@ -41,6 +41,24 @@ public class Window {
         initWindowEvent();
     }
 
+    public void onSubmit(){
+        if(! information.isVisible() && callBack.checkData()){
+            try {
+                information.setVisible(true);
+                frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                cmdHelper.execCmd(callBack.commandBuilder());
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+        else {
+            if(! callBack.checkData()){
+                warning.setTitle("warning");
+                warning.setVisible(true);
+            }
+        }
+    }
+
     private void initWindowView(){
         info.setEditable(false);
         info.setFont(R.infoFont);
@@ -54,34 +72,13 @@ public class Window {
         warning.add(warningText);
         warning.setResizable(false);
         warning.setSize(1000 , 500);
-        submitBtn.setIcon(new ImageIcon("src/Resource/submit.png"));
+//        submitBtn.setIcon(new ImageIcon("src/Resource/submit.png"));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(Color.white);
         frame.setSize(R.frame_width , R.frame_height);
     }
+
     public void initWindowEvent(){
-        submitBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(! information.isVisible() && callBack.checkData()){
-                    try {
-                        information.setVisible(true);
-                        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                        cmdHelper.execCmd(callBack.commandBuilder());
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-                else {
-                    if(! callBack.checkData()){
-                        warning.setTitle("warning");
-                        warning.setVisible(true);
-                    }
-                }
-
-            }
-        });
-
         information.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

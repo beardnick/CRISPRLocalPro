@@ -125,7 +125,7 @@ public class GeneSearch extends Window implements WindowCallBack {
 
         addComp(con , 2 , 0 , 1 , 1 , new Insets(10 , 10 , 10 ,10));
         layout.setConstraints(viceTitle , con);
-        contentPanel.add(viceTitle);
+//        contentPanel.add(viceTitle);
 
         addComp(con , 2 , 1 , 6, 1 , new Insets(10 , 10 , 10 , 10));
         layout.setConstraints(listText , con);
@@ -168,9 +168,9 @@ public class GeneSearch extends Window implements WindowCallBack {
         layout.setConstraints(outputBtn , con);
         contentPanel.add(outputBtn);
 
-        addComp(con , 9 , 6 , 1 , 1 , new Insets(10 , 10 , 100, 50));
-        layout.setConstraints(submitBtn , con);
-        contentPanel.add(submitBtn);
+        addComp(con , 9 , 6 , 1 , 1 , new Insets(10 , 10 , 10, 50));
+//        layout.setConstraints(submitBtn , con);
+//        contentPanel.add(submitBtn);
 
         mainPanel.add(contentPanel , BorderLayout.CENTER);
         mainPanel.setBackground(Color.white);
