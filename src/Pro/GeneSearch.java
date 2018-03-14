@@ -33,12 +33,14 @@ public class GeneSearch extends Window implements WindowCallBack {
     private JLabel outputLabel = new JLabel("Output directory :");
     private JLabel numResultLabel = new JLabel("Number of result per gene :");
     private JLabel optionsLabel = new JLabel("Options :");
+    private JLabel labelLabel = new JLabel("Label :");
 
     private JTextField listText = new JTextField();
     private JTextField resultText = new JTextField();
     private JTextField userText = new JTextField();
     private JTextField outputText = new JTextField();
     private JTextField numResultText = new JTextField();
+    private JTextField labelText = new JTextField();
 
     private MyJButton listBtn = new MyJButton();
     private MyJButton resultBtn = new MyJButton();
@@ -48,7 +50,7 @@ public class GeneSearch extends Window implements WindowCallBack {
     private JPanel titlePanel = new JPanel();
     private JPanel contentPanel = new JPanel();
 
-    private GridBagConstraints con = new GridBagConstraints();
+    private GridBagConstraints constraints = new GridBagConstraints();
     private GridBagLayout layout = new GridBagLayout();
 
     private JFileChooser listFile= new JFileChooser();
@@ -71,12 +73,15 @@ public class GeneSearch extends Window implements WindowCallBack {
         outputLabel.setFont(R.textFont);
         numResultLabel.setFont(R.textFont);
         optionsLabel.setFont(R.textFont);
+        labelLabel.setFont(R.textFont);
+
 
         listText.setFont(R.textFont);
         resultText.setFont(R.textFont);
         userText.setFont(R.textFont);
         outputText.setFont(R.textFont);
         numResultText.setFont(R.textFont);
+        labelText.setFont(R.textFont);
 
         Icon dirIcon = new ImageIcon("src/Resource/dir.png");
         listBtn.setIcon(dirIcon);
@@ -87,89 +92,97 @@ public class GeneSearch extends Window implements WindowCallBack {
 
         mainPanel.setLayout(new BorderLayout());
 
-        con.fill = GridBagConstraints.BOTH;
-        con.weightx = 1;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 1;
 
         contentPanel.setLayout(layout);
         contentPanel.setBackground(Color.white);
 
-        con.anchor = GridBagConstraints.EAST;//all label align east
-        con.fill = GridBagConstraints.NONE; //all label wont expand
+        constraints.anchor = GridBagConstraints.EAST;//all label align east
+        constraints.fill = GridBagConstraints.NONE; //all label wont expand
 
-        addComp(con , 0 , 1 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(listLabel , con);
+        addComp(constraints, 0 , 1 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(listLabel , constraints);
         contentPanel.add(listLabel);
 
-        addComp(con , 0 , 2 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(resultLabel , con);
+        addComp(constraints, 0 , 2 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(resultLabel , constraints);
         contentPanel.add(resultLabel);
 
-        addComp(con , 0 , 3 , 2 , 1 , new Insets(30 , 10 , 30 , 10));
-        layout.setConstraints( optionsLabel, con);
+        addComp(constraints, 0 , 3 , 2 , 1 , new Insets(30 , 10 , 30 , 10));
+        layout.setConstraints( optionsLabel, constraints);
       //  contentPanel.add(optionsLabel);
 
-        addComp(con , 0 , 3 , 2 , 1 , new Insets(30 , 10 , 30 , 10));
-        layout.setConstraints( userLabel, con);
-        contentPanel.add(userLabel , con);
+        addComp(constraints, 0 , 3 , 2 , 1 , new Insets(30 , 10 , 30 , 10));
+        layout.setConstraints( userLabel, constraints);
+        contentPanel.add(userLabel , constraints);
 
-        addComp(con , 0 , 4 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(outputLabel , con);
+        addComp(constraints, 0 , 4 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(outputLabel , constraints);
         contentPanel.add(outputLabel);
 
-        addComp(con , 0 , 5 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(numResultLabel , con);
-        contentPanel.add(numResultLabel);
+//        addComp(constraints, 0 , 5 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
+//        layout.setConstraints(numResultLabel , constraints);
+//        contentPanel.add(numResultLabel);
 
-        con.fill = GridBagConstraints.HORIZONTAL;
-        con.weightx = 8;
+        addComp(constraints, 0 , 5 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(labelLabel , constraints);
+        contentPanel.add(labelLabel);
 
-        addComp(con , 2 , 0 , 1 , 1 , new Insets(10 , 10 , 10 ,10));
-        layout.setConstraints(viceTitle , con);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 8;
+
+        addComp(constraints, 2 , 0 , 1 , 1 , new Insets(10 , 10 , 10 ,10));
+        layout.setConstraints(viceTitle , constraints);
 //        contentPanel.add(viceTitle);
 
-        addComp(con , 2 , 1 , 6, 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(listText , con);
+        addComp(constraints, 2 , 1 , 6, 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(listText , constraints);
         contentPanel.add(listText);
 
-        addComp(con , 2 , 2 , 6, 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(resultText , con);
+        addComp(constraints, 2 , 2 , 6, 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(resultText , constraints);
         contentPanel.add(resultText);
 
-        addComp(con , 2 , 3 , 6 , 1 , new Insets(10, 10 , 10 , 10));
-        layout.setConstraints( userText, con);
-        contentPanel.add(userText , con);
+        addComp(constraints, 2 , 3 , 6 , 1 , new Insets(10, 10 , 10 , 10));
+        layout.setConstraints( userText, constraints);
+        contentPanel.add(userText , constraints);
 
-        addComp(con , 2 , 4  , 6, 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(outputText , con);
+        addComp(constraints, 2 , 4  , 6, 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(outputText , constraints);
         contentPanel.add(outputText);
 
-        addComp(con , 2 , 5 , 6, 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(numResultText , con);
-        contentPanel.add(numResultText);
+//        addComp(constraints, 2 , 5 , 6, 1 , new Insets(10 , 10 , 10 , 10));
+//        layout.setConstraints(numResultText , constraints);
+//        contentPanel.add(numResultText);
+
+        addComp(constraints, 2 , 5 , 6, 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(labelText , constraints);
+        contentPanel.add(labelText);
 
 
-        con.fill = GridBagConstraints.HORIZONTAL;
-        con.weightx = 1;
-        con.anchor = GridBagConstraints.WEST;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 1;
+        constraints.anchor = GridBagConstraints.WEST;
 
-        addComp(con , 8 , 1 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(listBtn , con);
+        addComp(constraints, 8 , 1 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(listBtn , constraints);
         contentPanel.add(listBtn);
 
-        addComp(con , 8 , 2 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(resultBtn , con);
+        addComp(constraints, 8 , 2 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(resultBtn , constraints);
         contentPanel.add(resultBtn);
 
-        addComp(con , 8 , 3 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints( userBtn, con);
-        contentPanel.add(userBtn , con);
+        addComp(constraints, 8 , 3 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints( userBtn, constraints);
+        contentPanel.add(userBtn , constraints);
 
-        addComp(con , 8 , 4 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(outputBtn , con);
+        addComp(constraints, 8 , 4 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(outputBtn , constraints);
         contentPanel.add(outputBtn);
 
-        addComp(con , 9 , 6 , 1 , 1 , new Insets(10 , 10 , 10, 50));
-//        layout.setConstraints(submitBtn , con);
+        addComp(constraints, 9 , 6 , 1 , 1 , new Insets(10 , 10 , 10, 50));
+//        layout.setConstraints(submitBtn , constraints);
 //        contentPanel.add(submitBtn);
 
         mainPanel.add(contentPanel , BorderLayout.CENTER);

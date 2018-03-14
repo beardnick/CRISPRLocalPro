@@ -7,6 +7,8 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -26,16 +28,21 @@ public class UserData extends Window implements WindowCallBack {
 
     private JLabel title = new JLabel("CRISPR-Local");
     private JLabel viceTitle = new JLabel("User's data specific sgRNA design optional");
+    private JLabel designModeLabel = new JLabel("Design mode :");
+    private JLabel datalabel = new JLabel("User's sequencing data :");
+    private JLabel outputLabel = new JLabel("Output directory :");
+    private JLabel annoLabel = new JLabel("Genome annotation :");
+    private JLabel threadsLabel = new JLabel("Threads :");
+    private JLabel guideSequenceLengthLabel = new JLabel("Guide Sequence length :");
+    private JLabel pamLabel = new JLabel("PAM :");
 
-    private JLabel dataLable= new JLabel("Your sequending data :");
-    private JLabel outputLable= new JLabel("Output directory :");
-    private JLabel annoLable= new JLabel("Genome annotation :");
-    private JLabel threadsLable= new JLabel("Threads :");
-
+    private JComboBox designModeBox = new JComboBox();
     private JTextField dataText= new JTextField();
     private JTextField outputText= new JTextField();
     private JTextField annoText= new JTextField();
     private JTextField threadsText= new JTextField(5);
+    private JTextField guideSequenceLengthText = new JTextField();
+    private JTextField pamText = new JTextField();
 
     private MyJButton dataBtn = new MyJButton();
     private MyJButton annoBtn = new MyJButton();
@@ -44,7 +51,7 @@ public class UserData extends Window implements WindowCallBack {
     private JPanel titlePanel = new JPanel();
     private JPanel contentPanel = new JPanel();
 
-    private GridBagConstraints con = new GridBagConstraints();
+    private GridBagConstraints constraints = new GridBagConstraints();
     private GridBagLayout layout = new GridBagLayout();
 
     private JFileChooser annFile = new JFileChooser();
@@ -60,20 +67,31 @@ public class UserData extends Window implements WindowCallBack {
         title.setFont(R.titleFont);
         viceTitle.setFont(R.viceTitleFont);
 
-        dataLable.setFont(R.textFont);
-        outputLable.setFont(R.textFont);
-        annoLable.setFont(R.textFont);
-        annoLable.setForeground(Color.gray);
-        threadsLable.setFont(R.textFont);
+        designModeLabel.setFont(R.textFont);
+        datalabel.setFont(R.textFont);
+        outputLabel.setFont(R.textFont);
+        annoLabel.setFont(R.textFont);
+        annoLabel.setForeground(Color.gray);
+        threadsLabel.setFont(R.textFont);
+        guideSequenceLengthLabel.setFont(R.textFont);
+        pamLabel.setFont(R.textFont);
+        guideSequenceLengthLabel.setForeground(Color.gray);
+        pamLabel.setForeground(Color.gray);
 
-
-
+        designModeBox.setFont(R.textFont);
         dataText.setFont(R.textFont);
         annoText.setFont(R.textFont);
         annoText.setOpaque(true);
         annoText.setBackground(Color.gray);
+        annoText.setEditable(false);
         outputText.setFont(R.textFont);
         threadsText.setFont(R.textFont);
+        guideSequenceLengthText.setFont(R.textFont);
+        pamText.setFont(R.textFont);
+        guideSequenceLengthText.setBackground(Color.gray);
+        pamText.setBackground(Color.gray);
+        guideSequenceLengthText.setEditable(false);
+        pamText.setEditable(false);
 
         ImageIcon dirIcon = new ImageIcon("src/Resource/dir.png");
         dataBtn.setIcon(dirIcon);
@@ -82,8 +100,8 @@ public class UserData extends Window implements WindowCallBack {
 
          mainPanel.setLayout(new BorderLayout());
 
-        con.fill = GridBagConstraints.BOTH;
-        con.weightx = 1;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 1;
 
         contentPanel.setLayout(layout);
         contentPanel.setBackground(Color.white);
@@ -91,101 +109,123 @@ public class UserData extends Window implements WindowCallBack {
         titlePanel.setBackground(Color.white);
 
 
-        addComp(con , 0 , 0  ,3 , 2 ,new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(title , con);
+        addComp(constraints, 0 , 0  ,3 , 2 ,new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(title , constraints);
 
-        con.anchor = GridBagConstraints.WEST;
-        addComp(con , 2 , 0 , 1 , 1, new Insets(10 , 10 , 10 ,10));
-        layout.setConstraints(viceTitle , con);
+        constraints.anchor = GridBagConstraints.WEST;
+        addComp(constraints, 2 , 0 , 1 , 1, new Insets(10 , 10 , 10 ,10));
+        layout.setConstraints(viceTitle , constraints);
 //        contentPanel.add(viceTitle);
 
 
         //contentPanel
 
-        con.anchor = GridBagConstraints.EAST;//all label align east
-        con.fill = GridBagConstraints.NONE; //all label wont expand
+        constraints.anchor = GridBagConstraints.EAST;//all label align east
+        constraints.fill = GridBagConstraints.NONE; //all label wont expand
 
-        addComp(con , 0 , 1 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(dataLable , con);
-        contentPanel.add(dataLable);
+        addComp(constraints , 0 , 0 ,  1, 1, new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints( designModeLabel, constraints);
+        contentPanel.add(designModeLabel);
+
+        addComp(constraints, 0 , 1 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(datalabel, constraints);
+        contentPanel.add(datalabel);
 
 
 
-        addComp(con , 0 , 2 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(annoLable , con);
-        contentPanel.add(annoLable);
+        addComp(constraints, 0 , 2 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(annoLabel, constraints);
+        contentPanel.add(annoLabel);
 
-        addComp(con , 0 , 3 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(outputLable , con);
-        contentPanel.add(outputLable);
+        addComp(constraints, 0 , 3 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(outputLabel, constraints);
+        contentPanel.add(outputLabel);
 
-        addComp(con , 0 , 4 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(threadsLable , con);
-        contentPanel.add(threadsLable);
+        addComp(constraints, 0 , 4 , 2 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(threadsLabel, constraints);
+        contentPanel.add(threadsLabel);
+
+        addComp(constraints ,0  , 5 ,  2, 1, new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(guideSequenceLengthLabel , constraints);
+        contentPanel.add(guideSequenceLengthLabel);
+
+         addComp(constraints , 0 , 6 ,  1, 1, new Insets(10 , 10 , 10 , 10));
+         layout.setConstraints( pamLabel, constraints);
+         contentPanel.add(pamLabel);
 
         //middle panel , JTextField
 //
-//        addComp(con , 2 , 0 , 1 , 1 , new Insets(10 , 10 , 80 , 10));
-//        con.anchor = GridBagConstraints.WEST;
-
-        con.fill = GridBagConstraints.HORIZONTAL;
-        con.weightx = 1;
+//        addComp(constraints , 2 , 0 , 1 , 1 , new Insets(10 , 10 , 80 , 10));
+//        constraints.anchor = GridBagConstraints.WEST;
 
 
-        con.anchor = GridBagConstraints.WEST;
-        addComp(con , 8 , 1 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(dataBtn , con);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 1;
+
+
+        constraints.anchor = GridBagConstraints.WEST;
+        addComp(constraints, 8 , 1 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(dataBtn , constraints);
         contentPanel.add(dataBtn);
 
-        addComp(con , 8 , 2 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(annoBtn , con);
+        addComp(constraints, 8 , 2 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(annoBtn , constraints);
         contentPanel.add(annoBtn);
 
 
-        addComp(con , 8 , 3 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(outputBtn , con);
+        addComp(constraints, 8 , 3 , 1 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(outputBtn , constraints);
         contentPanel.add(outputBtn);
 
-        addComp(con , 9 , 5 , 1 , 1 , new Insets(50 , 10 , 10 , 10));
-//        layout.setConstraints(submitBtn , con);
+        addComp(constraints, 9 , 5 , 1 , 1 , new Insets(50 , 10 , 10 , 10));
+//        layout.setConstraints(submitBtn , constraints);
 //        contentPanel.add(submitBtn);
 
+        addComp(constraints ,  2, 0 ,  1, 1, new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints( designModeBox, constraints);
+        contentPanel.add(designModeBox);
 
-        con.fill = GridBagConstraints.HORIZONTAL;
-        con.weightx = 8;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 8;
 
-        addComp(con , 2 , 1 , 6, 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(dataText , con);
+        addComp(constraints, 2 , 1 , 6, 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(dataText , constraints);
         contentPanel.add(dataText);
 
 
 
-        addComp(con , 2 , 2 , 6 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(annoText , con);
+        addComp(constraints, 2 , 2 , 6 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(annoText , constraints);
         contentPanel.add(annoText);
 
 
 
-        addComp(con , 2 , 3 , 6 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(outputText , con);
+        addComp(constraints, 2 , 3 , 6 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(outputText , constraints);
         contentPanel.add(outputText);
 
-        addComp(con , 2 , 4 , 3 , 1 , new Insets(10 , 10 , 10 , 10));
-        layout.setConstraints(threadsText , con);
+        addComp(constraints, 2 , 4 , 3 , 1 , new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints(threadsText , constraints);
         contentPanel.add(threadsText);
 
+        addComp(constraints , 2 ,  5,  1, 1, new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints( guideSequenceLengthText, constraints);
+        contentPanel.add(guideSequenceLengthText);
+
+        addComp(constraints ,  2,  6,  1, 1, new Insets(10 , 10 , 10 , 10));
+        layout.setConstraints( pamText, constraints);
+        contentPanel.add(pamText);
 
 
 
-
-        con.fill = GridBagConstraints.HORIZONTAL;
-        addComp(con , 0 , 0 , 3 , 3 , new Insets(10 , 10 , 10 ,10));
-        layout.setConstraints(titlePanel , con);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        addComp(constraints, 0 , 0 , 3 , 3 , new Insets(10 , 10 , 10 ,10));
+        layout.setConstraints(titlePanel , constraints);
 //        mainPanel.add(titlePanel , BorderLayout.NORTH);
 //        frame.add(titlePanel , BorderLayout.NORTH);
 
-        addComp(con , 0 , 3 , 3, 10 , new Insets(10  , 10 ,10 , 10));
-        layout.setConstraints(contentPanel , con);
+        addComp(constraints, 0 , 3 , 3, 10 , new Insets(10  , 10 ,10 , 10));
+        layout.setConstraints(contentPanel , constraints);
         mainPanel.add(contentPanel , BorderLayout.CENTER);
 //        frame.add(contentPanel , BorderLayout.CENTER);
     //    frame.add(mainPanel);
@@ -197,6 +237,31 @@ public class UserData extends Window implements WindowCallBack {
     }
 
     public void initData(){
+        designModeBox.addItem("Casq");
+        designModeBox.addItem("Cpf1");
+        designModeBox.addItem("Custom");
+        designModeBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if(e.getStateChange() == ItemEvent.SELECTED){
+                if(designModeBox.getSelectedIndex() != 0){
+                        guideSequenceLengthLabel.setForeground(Color.black);
+                        pamLabel.setForeground(Color.black);
+                        guideSequenceLengthText.setBackground(Color.white);
+                        pamText.setBackground(Color.white);
+                        guideSequenceLengthText.setEditable(true);
+                        pamText.setEditable(true);
+                    }else{
+                        guideSequenceLengthLabel.setForeground(Color.gray);
+                        pamLabel.setForeground(Color.gray);
+                        guideSequenceLengthText.setBackground(Color.gray);
+                        pamText.setBackground(Color.gray);
+                        guideSequenceLengthText.setEditable(false);
+                        pamText.setEditable(false);
+                    }
+                }
+            }
+        });
         threadsText.setText("1");
         annFile.setDialogTitle("choose a .gff3 file");
         annFile.setFileFilter(new FileFilter() {
@@ -279,11 +344,13 @@ public class UserData extends Window implements WindowCallBack {
                     dataText.setText(dataString.toString());
                     outputText.setEditable(false);
                     if(dataString.toString().contains(".sam") || dataString.toString().contains(".bam")){
-                        annoLable.setForeground(Color.black);
+                        annoLabel.setForeground(Color.black);
                         annoText.setBackground(Color.white);
+                        annoText.setEditable(true);
                     }else {
-                        annoLable.setForeground(Color.gray);
+                        annoLabel.setForeground(Color.gray);
                         annoText.setBackground(Color.gray);
+                        annoText.setEditable(false);
                     }
                 }
             }
@@ -292,7 +359,7 @@ public class UserData extends Window implements WindowCallBack {
         annoBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(annoLable.getForeground() == Color.black){
+                if(annoLabel.getForeground() == Color.black){
                     if(annFile.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION){
                         annoText.setText(annFile.getSelectedFile().getPath());
                         annoText.setEditable(false);
@@ -308,7 +375,7 @@ public class UserData extends Window implements WindowCallBack {
 
         cmd.append(" -i " + dataText.getText());
 
-        if(annoLable.getForeground()== Color.black){
+        if(annoLabel.getForeground()== Color.black){
             cmd.append(" -g " + annoText.getText());
         }
 
@@ -324,7 +391,7 @@ public class UserData extends Window implements WindowCallBack {
         warningText.setText("");
         boolean dataValid = true;
         textFieldEmpty(dataText , Color.pink, "please choose your data file\n" );
-        if(annoLable.getForeground() == Color.black){
+        if(annoLabel.getForeground() == Color.black){
             textFieldEmpty(annoText , Color.pink , "please choose a gff3 file\n");
         }
         textFieldEmpty(outputText , Color.pink , "please choose a output directory\n");
@@ -333,9 +400,9 @@ public class UserData extends Window implements WindowCallBack {
 //            System.out.println("threadsNum :" + threadsText.getText());
         }else  if(! number.matcher(threadsText.getText()).matches()){
             warningText.append("please enter the number of the threads\n");
-            threadsLable.setForeground(Color.pink);
+            threadsLabel.setForeground(Color.pink);
         }else {
-            threadsLable.setForeground(Color.black);
+            threadsLabel.setForeground(Color.black);
         }
         return warningText.getText().equals("");
 
