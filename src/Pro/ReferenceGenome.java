@@ -16,12 +16,14 @@ import java.util.regex.Pattern;
  */
 public class ReferenceGenome extends Window implements WindowCallBack{
 
+    public static final String CMD = "CMD >>";
 
     public ReferenceGenome(JPanel panel , JFrame frame ){
         super(frame);
        this.mainPanel = panel;
         setCallBack(this);
     }
+    private String[] modes = {"Cas9" , "Cpf1" , "Custom"};
 
     private JPanel mainPanel;
 
@@ -309,9 +311,9 @@ public class ReferenceGenome extends Window implements WindowCallBack{
 
 
     public void initData(){
-        designModeBox.addItem("Casq");
-        designModeBox.addItem("Cpf1");
-        designModeBox.addItem("Custom");
+        for(String x : modes){
+            designModeBox.addItem(x);
+        }
         designModeBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -320,6 +322,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
                         guideSequenceLengthLabel.setForeground(Color.black);
                         pamLabel.setForeground(Color.black);
                         guideSequenceLengthText.setBackground(Color.white);
+                        guideSequenceLengthText.setForeground(Color.black);
                         pamText.setBackground(Color.white);
                         guideSequenceLengthText.setEditable(true);
                         pamText.setEditable(true);
@@ -334,6 +337,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
                         pamLabel.setForeground(Color.gray);
                         guideSequenceLengthText.setBackground(Color.gray);
                         pamText.setBackground(Color.gray);
+                        guideSequenceLengthText.setForeground(Color.gray);
                         guideSequenceLengthText.setEditable(false);
                         pamText.setEditable(false);
                         end3Label.setForeground(Color.black);
@@ -347,7 +351,8 @@ public class ReferenceGenome extends Window implements WindowCallBack{
             }
         });
         threadsNum.setText("1");
-
+        guideSequenceLengthText.setText("24");
+        guideSequenceLengthText.setForeground(Color.GRAY);
         referFile.setFileFilter(new FileFilter() {
 
             @Override
@@ -415,7 +420,11 @@ public class ReferenceGenome extends Window implements WindowCallBack{
     }
 
     public String commandBuilder(){
-        StringBuilder cmd = new StringBuilder("perl RD-build.pl");
+        StringBuilder cmd = new StringBuilder("perl $0 ");
+
+        //-m mode
+
+        cmd.append(" -m " + modes[designModeBox.getSelectedIndex()]);
 
         //-i Genome
 
@@ -437,16 +446,26 @@ public class ReferenceGenome extends Window implements WindowCallBack{
 
         cmd.append(" -p " + threadsNum.getText());
 
-        //-U opt_up
 
-        cmd.append(" -U " + end5Text.getText());
+        if(modes[designModeBox.getSelectedIndex()].equals("Cas9")){
+            //-U opt_up
 
-        //-D opt_down
+            cmd.append(" -U " + end5Text.getText());
 
-        cmd.append(" -D " + end3Text.getText());
+            //-D opt_down
 
+            cmd.append(" -D " + end3Text.getText());
+        }else {
+            //-t Pamtype
 
-//        System.out.println(cmd.toString());
+            cmd.append(" -t " + pamText.getText());
+
+            //-x length of protospacer
+
+            cmd.append(" -x " + guideSequenceLengthText.getText());
+        }
+
+        System.out.println(CMD + cmd.toString());
 
         return cmd.toString();
     }
@@ -475,29 +494,39 @@ public class ReferenceGenome extends Window implements WindowCallBack{
             threadsLabel.setForeground(Color.black);
         }
 
-        if(textFieldEmpty(end3Text , Color.pink , "please enter a number between 0 and 15 in Expanding 3 ' -end\n")){
+        if(modes[designModeBox.getSelectedIndex()].equals("Cas9")){
+            if(textFieldEmpty(end3Text , Color.pink , "please enter a number between 0 and 15 in Expanding 3 ' -end\n")){
 //            System.out.println("end3Text :" + end3Text.getText());
-        }else if(!  number.matcher(end3Text.getText()).matches()){
-            warningText.append("please enter number to end3 text\n");
-            end3Label.setForeground(Color.pink);
-        }else if(Integer.valueOf(end3Text.getText()) > 15 || Integer.valueOf(end3Text.getText()) < 0){
-            warningText.append("the number must between 0 and 15\n");
-            end3Label.setForeground(Color.pink);
+            }else if(!  number.matcher(end3Text.getText()).matches()){
+                warningText.append("please enter number to end3 text\n");
+                end3Label.setForeground(Color.pink);
+            }else if(Integer.valueOf(end3Text.getText()) > 15 || Integer.valueOf(end3Text.getText()) < 0){
+                warningText.append("the number must between 0 and 15\n");
+                end3Label.setForeground(Color.pink);
 
-        }else{
-            end3Label.setForeground(Color.black);
-        }
+            }else{
+                end3Label.setForeground(Color.black);
+            }
 
-        if(textFieldEmpty(end5Text , Color.pink , "please enter a number between 0 and 15 in Expanding 5 ' -end\n" )){
+            if(textFieldEmpty(end5Text , Color.pink , "please enter a number between 0 and 15 in Expanding 5 ' -end\n" )){
 //            System.out.println("end5Text :" + end5Text.getText());
-        }else if(! number.matcher(end5Text.getText()).matches()){
-            warningText.append("please enter number to end5 text\n");
-            end5Label.setForeground(Color.pink);
-        } else  if(Integer.valueOf(end5Text.getText()) > 15 || Integer.valueOf(end5Text.getText()) < 0){
-            warningText.append("the number must between 0 and 15\n");
-            end5Label.setForeground(Color.pink);
-        }else{
-            end5Label.setForeground(Color.black);
+            }else if(! number.matcher(end5Text.getText()).matches()){
+                warningText.append("please enter number to end5 text\n");
+                end5Label.setForeground(Color.pink);
+            } else  if(Integer.valueOf(end5Text.getText()) > 15 || Integer.valueOf(end5Text.getText()) < 0){
+                warningText.append("the number must between 0 and 15\n");
+                end5Label.setForeground(Color.pink);
+            }else{
+                end5Label.setForeground(Color.black);
+            }
+        }else {
+            if(textFieldEmpty(guideSequenceLengthText , Color.pink , "please enter the length of protospacer\n")){
+//            System.out.println("end3Text :" + end3Text.getText());
+            }else if(!  number.matcher(guideSequenceLengthText.getText()).matches()){
+                warningText.append("please enter a number\n");
+                guideSequenceLengthLabel.setForeground(Color.pink);
+            }
+            textFieldEmpty(pamText , Color.PINK , "please enter the type of PAM\n");
         }
 
 //        System.out.println(warningText.getText().equals(""));

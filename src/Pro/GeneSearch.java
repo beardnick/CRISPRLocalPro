@@ -239,7 +239,7 @@ public class GeneSearch extends Window implements WindowCallBack {
 
     public void initData(){
         numResultText.setText("1");
-
+        labelText.setText("DB_search");
         listFile.setFileFilter(new FileFilter() {
             @Override
             public boolean accept(File f) {
@@ -264,9 +264,9 @@ public class GeneSearch extends Window implements WindowCallBack {
 
 
     public String commandBuilder(){
-        StringBuilder cmd = new StringBuilder("perl DB-search.pl");
+        StringBuilder cmd = new StringBuilder("perl $0");
 
-        cmd.append(" -l " + listText.getText());
+        cmd.append(" -g " + listText.getText());
         cmd.append(" -i " + resultText.getText());
         if(userText.getText().length() > 0)
             cmd.append(" -u " + userText.getText());
@@ -274,6 +274,9 @@ public class GeneSearch extends Window implements WindowCallBack {
             cmd.append(" -o " + outputText.getText());
         if(numResultText.getText().length() > 0)
             cmd.append(" -N " + numResultText.getText());
+        if(labelText.getText().length() > 0){
+            cmd.append(" -l " + labelText.getText());
+        }
 
 
 //        System.out.println(cmd.toString());

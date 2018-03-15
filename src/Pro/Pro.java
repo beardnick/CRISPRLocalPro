@@ -174,7 +174,7 @@ public class Pro{
         referenceGenome.initData();
         geneSearch.initData();
         userData.initData();
-        plSearch.initEvent();
+        plSearch.initData();
     }
 
     public void initEvent(){

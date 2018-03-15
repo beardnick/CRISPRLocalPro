@@ -18,6 +18,8 @@ import java.util.regex.Pattern;
  */
 public class UserData extends Window implements WindowCallBack {
 
+    private String[] modes = {"Cas9" , "Cpf1" , "Custom"};
+
     public UserData(JPanel panel , JFrame frame){
         super(frame);
         this.mainPanel = panel;
@@ -237,9 +239,10 @@ public class UserData extends Window implements WindowCallBack {
     }
 
     public void initData(){
-        designModeBox.addItem("Casq");
-        designModeBox.addItem("Cpf1");
-        designModeBox.addItem("Custom");
+        for (String x: modes
+             ) {
+            designModeBox.addItem(x);
+        }
         designModeBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -371,7 +374,13 @@ public class UserData extends Window implements WindowCallBack {
     }
 
     public String commandBuilder(){
-        StringBuilder cmd = new StringBuilder("perl UD-build.pl");
+        StringBuilder cmd = new StringBuilder("perl $0 ");
+
+        // TODO: 2018/3/15 Genome什么时候有效，什么时候无效
+
+        //-m mode
+
+        cmd.append(" -m " + modes[designModeBox.getSelectedIndex()] );
 
         cmd.append(" -i " + dataText.getText());
 
@@ -382,6 +391,16 @@ public class UserData extends Window implements WindowCallBack {
         cmd.append(" -o " + outputText.getText());
 
         cmd.append(" -p " + threadsText.getText());
+
+        if( ! modes[designModeBox.getSelectedIndex()].equals("Cas9")){
+            //-t Pamtype
+
+            cmd.append(" -t " + pamText.getText());
+
+            //-x length of protospacer
+
+            cmd.append(" -x " + guideSequenceLengthText.getText());
+        }
 
 //        System.out.println(cmd.toString());
         return cmd.toString();
@@ -404,6 +423,16 @@ public class UserData extends Window implements WindowCallBack {
         }else {
             threadsLabel.setForeground(Color.black);
         }
+        if(! modes[designModeBox.getSelectedIndex()].equals("Cas9")){
+            if(textFieldEmpty(guideSequenceLengthText , Color.pink , "please enter the length of protospacer\n")){
+//            System.out.println("end3Text :" + end3Text.getText());
+            }else if(!  number.matcher(guideSequenceLengthText.getText()).matches()){
+                warningText.append("please enter a number\n");
+                guideSequenceLengthLabel.setForeground(Color.pink);
+            }
+            textFieldEmpty(pamText , Color.PINK , "please enter the type of PAM\n");
+        }
+
         return warningText.getText().equals("");
 
     }
