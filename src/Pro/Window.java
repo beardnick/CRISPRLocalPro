@@ -12,6 +12,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 interface WindowCallBack{
+    public static final String CMD = "CMD>>";
     public  boolean checkData();
     public  String commandBuilder();
     public String[] stopCmdBuilder();

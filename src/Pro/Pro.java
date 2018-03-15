@@ -30,6 +30,7 @@ public class Pro{
     private JPanel dbSearchPanel = new JPanel();
     private JPanel plSearchPanel = new JPanel();
     private JPanel bottomPanel = new JPanel();
+    private JScrollPane scrollMainPanel = new JScrollPane();
 
     private MyJButton rdBtn = new MyJButton();
     private MyJButton udBtn = new MyJButton();
@@ -64,7 +65,7 @@ public class Pro{
         plSearchBtn.setIcon(new ImageIcon("src/Resource/P.png"));
         helpBtn.setIcon(new ImageIcon("src/Resource/help.png"));
         submitBtn.setIcon(new ImageIcon("src/Resource/submit.png"));
-        maizegoLabel.setIcon(new ImageIcon("src/Resource/maizego_logo.png"));
+        maizegoLabel.setIcon(new ImageIcon("src/Resource/MaizeGo_logo.png"));
         crisprLabel.setIcon(new ImageIcon("src/Resource/CRISPR-P.png"));
 
 
@@ -97,7 +98,7 @@ public class Pro{
         topPanel.add(title);
 
 
-        addComp(constraints , 5, 0 , 1 , 1 , new Insets(10 , 100 , 10 , 10));
+        addComp(constraints , 5, 0 , 1 , 1 , new Insets(10 , 50 , 10 , 10));
         layout.setConstraints(helpBtn , constraints);
         topPanel.add(helpBtn);
 
@@ -140,9 +141,9 @@ public class Pro{
         bottomPanel.setBackground(Color.white);
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
 
-        bottomPanel.add(Box.createHorizontalStrut(50));
+        bottomPanel.add(Box.createHorizontalStrut(30));
         bottomPanel.add(crisprLabel);
-        bottomPanel.add(Box.createHorizontalStrut(10));
+        bottomPanel.add(Box.createHorizontalStrut(50));
         bottomPanel.add(maizegoLabel);
         bottomPanel.add(Box.createHorizontalGlue());
         bottomPanel.add(submitBtn);
@@ -165,7 +166,9 @@ public class Pro{
 //        frame.add(bottomPanel , BorderLayout.SOUTH);
 
         mainPanel = rdPanel;
-        frame.add(mainPanel , BorderLayout.CENTER);
+        scrollMainPanel.setLayout(new ScrollPaneLayout());
+        scrollMainPanel.setViewportView(rdPanel);
+        frame.add( scrollMainPanel, BorderLayout.CENTER);
         frame.setVisible(true);
 
     }
@@ -229,10 +232,10 @@ public class Pro{
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     frame.add(topPanel , BorderLayout.NORTH);
-                    mainPanel = jPanels.get(finalI);
+                    scrollMainPanel.setViewportView(jPanels.get(finalI));
                     jPanels.get(finalI).setVisible(true);
                     currentWindow = finalI;
-                    frame.add(mainPanel , BorderLayout.CENTER);
+//                    frame.add(mainPanel , BorderLayout.CENTER);
                     for(int j = 0 ; j < jPanels.size() ; j ++){
                         if(j != finalI){
                             jPanels.get(j).setVisible(false);

@@ -18,6 +18,8 @@ import java.util.regex.Pattern;
  */
 public class UserData extends Window implements WindowCallBack {
 
+    public static final String CMD = "CMD>>";
+
     private String[] modes = {"Cas9" , "Cpf1" , "Custom"};
 
     public UserData(JPanel panel , JFrame frame){
@@ -374,7 +376,7 @@ public class UserData extends Window implements WindowCallBack {
     }
 
     public String commandBuilder(){
-        StringBuilder cmd = new StringBuilder("perl $0 ");
+        StringBuilder cmd = new StringBuilder("perl  UD-build.pl");
 
         // TODO: 2018/3/15 Genome什么时候有效，什么时候无效
 
@@ -402,7 +404,7 @@ public class UserData extends Window implements WindowCallBack {
             cmd.append(" -x " + guideSequenceLengthText.getText());
         }
 
-//        System.out.println(cmd.toString());
+        System.out.println(CMD + cmd.toString());
         return cmd.toString();
     }
 
@@ -449,5 +451,6 @@ public class UserData extends Window implements WindowCallBack {
         }
         return stop;
     }
+
 
 }

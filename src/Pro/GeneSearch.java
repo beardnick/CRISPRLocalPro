@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
  */
 public class GeneSearch extends Window implements WindowCallBack {
 
+    public static final String CMD = "CMD>>";
     public GeneSearch(JPanel panel , JFrame frame){
         super(frame);
         this.mainPanel = panel;
@@ -261,10 +262,14 @@ public class GeneSearch extends Window implements WindowCallBack {
 
     }
 
+    private String scriptHead = "perl DB-search.pl";
 
+    public void setScriptHead(String scriptHead) {
+        this.scriptHead = scriptHead;
+    }
 
     public String commandBuilder(){
-        StringBuilder cmd = new StringBuilder("perl $0");
+        StringBuilder cmd = new StringBuilder(scriptHead);
 
         cmd.append(" -g " + listText.getText());
         cmd.append(" -i " + resultText.getText());
@@ -272,14 +277,12 @@ public class GeneSearch extends Window implements WindowCallBack {
             cmd.append(" -u " + userText.getText());
         if(outputText.getText().length() > 0)
             cmd.append(" -o " + outputText.getText());
-        if(numResultText.getText().length() > 0)
-            cmd.append(" -N " + numResultText.getText());
         if(labelText.getText().length() > 0){
             cmd.append(" -l " + labelText.getText());
         }
 
 
-//        System.out.println(cmd.toString());
+        System.out.println(CMD + cmd.toString());
 
         return cmd.toString();
     }
@@ -293,15 +296,15 @@ public class GeneSearch extends Window implements WindowCallBack {
         textFieldEmpty(resultText , Color.pink , "please choose the result file\n");
 //        textFieldEmpty(outputText , Color.pink , "please choose the output directory\n");
 
-       if(numResultText.getText().length() > 0){
-           Pattern number = Pattern.compile("^[0-9]*$");
-           if(! number.matcher(numResultText.getText()).matches()){
-               warningText.append("please enter the number of the result\n");
-               numResultLabel.setForeground(Color.pink);
-           }else {
-               numResultLabel.setForeground(Color.black);
-           }
-        }
+//       if(numResultText.getText().length() > 0){
+//           Pattern number = Pattern.compile("^[0-9]*$");
+//           if(! number.matcher(numResultText.getText()).matches()){
+//               warningText.append("please enter the number of the result\n");
+//               numResultLabel.setForeground(Color.pink);
+//           }else {
+//               numResultLabel.setForeground(Color.black);
+//           }
+//        }
 //        System.out.println(warningText.getText().equals(""));
 //        System.out.println(warningText.getText().toString());
 
@@ -313,4 +316,7 @@ public class GeneSearch extends Window implements WindowCallBack {
         return stopCmd;
     }
 
+    public JTextField getLabelText() {
+        return labelText;
+    }
 }

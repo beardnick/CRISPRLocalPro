@@ -23,4 +23,17 @@ public class PlSearch extends GeneSearch{
 //    public String[] stopCmdBuilder() {
 //        return new String[0];
 //    }
+
+
+    @Override
+    public void initData() {
+        super.initData();
+        getLabelText().setText("PL_search");
+    }
+
+    @Override
+    public String commandBuilder() {
+        setScriptHead("perl PL-search.pl");
+        return super.commandBuilder();
+    }
 }

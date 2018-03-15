@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  */
 public class ReferenceGenome extends Window implements WindowCallBack{
 
-    public static final String CMD = "CMD >>";
+    public static final String CMD = "CMD>>";
 
     public ReferenceGenome(JPanel panel , JFrame frame ){
         super(frame);
@@ -420,7 +420,7 @@ public class ReferenceGenome extends Window implements WindowCallBack{
     }
 
     public String commandBuilder(){
-        StringBuilder cmd = new StringBuilder("perl $0 ");
+        StringBuilder cmd = new StringBuilder("perl RD-build.pl");
 
         //-m mode
 
