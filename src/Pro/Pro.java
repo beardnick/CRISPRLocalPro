@@ -2,6 +2,9 @@ package Pro;
 
 
 import Util.MyJButton;
+import chrriis.common.UIUtils;
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,6 +34,10 @@ public class Pro{
     private JPanel plSearchPanel = new JPanel();
     private JPanel bottomPanel = new JPanel();
     private JScrollPane scrollMainPanel = new JScrollPane();
+
+    private JPanel webPanel = new JPanel();
+    private JDialog webDialog;
+    private JWebBrowser webBrowser = new JWebBrowser();
 
     private MyJButton rdBtn = new MyJButton();
     private MyJButton udBtn = new MyJButton();
@@ -68,6 +75,13 @@ public class Pro{
         maizegoLabel.setIcon(new ImageIcon("src/Resource/MaizeGo_logo.png"));
         crisprLabel.setIcon(new ImageIcon("src/Resource/CRISPR-P.png"));
 
+        webPanel.setLayout(new BorderLayout());
+        webBrowser.setBarsVisible(true);
+        webPanel.add(webBrowser , BorderLayout.CENTER);
+        webDialog = new JDialog(frame);
+        webDialog.setSize(1000, 1000);
+        webDialog.setLayout(new BorderLayout());
+        webDialog.add(webPanel , BorderLayout.CENTER);
 
         title.setFont(R.titleFont);
         title.setFont(R.titleFont);
@@ -169,6 +183,7 @@ public class Pro{
         scrollMainPanel.setLayout(new ScrollPaneLayout());
         scrollMainPanel.setViewportView(rdPanel);
         frame.add( scrollMainPanel, BorderLayout.CENTER);
+//        frame.setLocationByPlatform(true);
         frame.setVisible(true);
 
     }
@@ -184,23 +199,29 @@ public class Pro{
         maizegoLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                try {
-                    Desktop.getDesktop().browse(new URI("http://www.maizego.org/"));
-                } catch (IOException | URISyntaxException e1) {
-                    e1.printStackTrace();
-                }
+//                try {
+//                    Desktop.getDesktop().browse(new URI("http://www.maizego.org/"));
+//                } catch (IOException | URISyntaxException e1) {
+//                    e1.printStackTrace();
+//                }
+                webPanel.setBorder(BorderFactory.createTitledBorder("Maizego"));
+                webBrowser.navigate("http://www.maizego.org/");
+                webDialog.setVisible(true);
             }
         });
         crisprLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                try {
-                    Desktop.getDesktop().browse(new URI("http://crispr.hzau.edu.cn/CRISPR2/"));
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                } catch (URISyntaxException e1) {
-                    e1.printStackTrace();
-                }
+//                try {
+//                    Desktop.getDesktop().browse(new URI("http://crispr.hzau.edu.cn/CRISPR2/"));
+//                } catch (IOException e1) {
+//                    e1.printStackTrace();
+//                } catch (URISyntaxException e1) {
+//                    e1.printStackTrace();
+//                }
+                webPanel.setBorder(BorderFactory.createTitledBorder("CRISPR2"));
+                webBrowser.navigate("http://crispr.hzau.edu.cn/CRISPR2/");
+                webDialog.setVisible(true);
             }
         });
         referenceGenome.initEvent();
@@ -294,10 +315,18 @@ public class Pro{
 
 
     public static void main(String[] args){
-        Pro pro = new Pro();
-        pro.initView();
-        pro.initData();
-        pro.initEvent();
+//        UIUtils.setPreferredLookAndFeel();
+        NativeInterface.open();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Pro pro = new Pro();
+                pro.initView();
+                pro.initData();
+                pro.initEvent();
+            }
+        });
+        NativeInterface.runEventPump();
     }
 
 }
